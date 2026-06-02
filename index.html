@@ -509,21 +509,7 @@ const completionMsg=isLastQuestion&&q.answered?showCompletionMessage():"";
 c.innerHTML=`<div class="q-header"><span class="badge ${bc}">${tl}</span><span class="badge badge-num">${ci+1} / ${filtered.length}</span></div><div class="section-label">${rt(q.section)} — ${rt(q.number)}</div><div class="q-text">${rt(q.question)}</div><div class="answers">${ah}</div>${fb}${completionMsg}`;
 updProg();
 }
-function showCompletionMessage(){
-return `
-<div class="completion-overlay" id="completionOverlay">
-<div class="completion-modal">
-<div class="completion-heart">🤍</div>
-<div class="completion-text">ادعيلي دعوه حلوه</div>
-<div class="completion-subtitle"></div>
-<div class="completion-actions">
-<button class="btn-restart-comp" onclick="restartQuiz()">إعادة تشغيل</button>
-<button class="btn-back-comp" onclick="switchMode('essay')">عرض المحتوى التعليمي</button>
-</div>
-</div>
-</div>
-`;
-}
+
 
 function answer(s){
 const q=filtered[ci];if(!q||q.answered)return;
