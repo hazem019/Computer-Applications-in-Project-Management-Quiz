@@ -1,1776 +1,431 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Electronic Business - Final-Review</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e}
+header{background:linear-gradient(135deg,#4a1a8a,#7c3aed,#a78bfa);color:#fff;padding:36px 20px;text-align:center;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 60%);animation:pulse 8s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+header h1{font-size:30px;margin-bottom:6px;position:relative}
+header p{opacity:.9;font-size:16px;position:relative}
+main{max-width:1050px;margin:28px auto;padding:0 16px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:#fff;border-radius:16px;padding:18px 12px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.06);border:1px solid #e8e8ee}
+.stat strong{display:block;font-size:26px;color:#7c3aed}
+.stat span{font-size:13px;color:#6b7280}
+.card{background:#fff;border-radius:18px;padding:24px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid #e8e8ee;margin-bottom:20px}
+.mode-selector{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.mode-btn{padding:12px 24px;border:2px solid #d1d5db;background:#fff;border-radius:12px;cursor:pointer;font-weight:700;font-size:15px;transition:all .3s;color:#1e293b}
+.mode-btn:hover{border-color:#7c3aed;background:#ede9fe;color:#6d28d9}
+.mode-btn.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+select{padding:11px 14px;border-radius:12px;border:1px solid #d1d5db;font-size:14px;outline:none;background:#fff;min-width:160px;cursor:pointer;transition:.2s}
+select:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.15)}
+.progress-wrap{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-bottom:20px}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#a78bfa);border-radius:99px;transition:.4s}
+.q-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.badge{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:700}
+.badge-tf{background:#dbeafe;color:#1e40af}
+.badge-mcq{background:#fce7f3;color:#9d174d}
+.badge-num{background:#f3f4f6;color:#374151}
+.section-label{font-size:13px;color:#7c3aed;font-weight:700;margin-bottom:10px;letter-spacing:.3px}
+.q-text{font-size:19px;line-height:1.7;margin-bottom:20px;color:#1e293b}
+.answers{display:grid;gap:10px}
+.answer-btn {
+  text-align: left;
+  background: #ffffff;
+  border: 2px solid #d1d5db;
+  border-radius: 16px;
+  padding: 18px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #1e293b;
+  transition: all 0.3s ease;
+}
 
-  <title>Computer Applications in Project Management Quiz</title>
+.answer-btn:hover:not(:disabled) {
+  background: #ede9fe;
+  border-color: #9f7aea;
+  box-shadow: 0 0 0 1px #9f7aea;
+}
 
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [["$", "$"], ["\\(", "\\)"]],
-        displayMath: [["$$", "$$"], ["\\[", "\\]"]]
-      },
-      svg: {
-        fontCache: "global"
-      }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+.answer-btn:disabled {
+  cursor: default;
+}
 
-  <style>
-    :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-    }
+.answer-btn.correct {
+  background: #dcfce7;
+  border-color: #22c55e;
+  color: #14532d;
+}
 
-    * {
-      box-sizing: border-box;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+.answer-btn.wrong {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #7f1d1d;
+}
+.answer-btn:hover:not(:disabled){background:#ede9fe;border-color:#9f7aea;box-shadow:0 0 0 1px #9f7aea}
+.answer-btn:disabled{cursor:default}
+.answer-btn.correct{background:#dcfce7;border-color:#22c55e;color:#14532d}
+.answer-btn.wrong{background:#fee2e2;border-color:#ef4444;color:#7f1d1d}
+.feedback{margin-top:18px;border-radius:14px;padding:16px;font-weight:600;line-height:1.65;font-size:15px}
+.feedback.correct{background:#dcfce7;color:#14532d;border:1px solid #86efac}
+.feedback.wrong{background:#fee2e2;color:#7f1d1d;border:1px solid #fca5a5}
+.feedback .detail{margin-top:8px;font-weight:500}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:22px}
+button{border:none;border-radius:12px;padding:12px 20px;cursor:pointer;font-weight:700;font-size:15px;transition:.2s}
+.btn-prev,.btn-restart{background:#e5e7eb;color:#374151}
+.btn-prev:hover,.btn-restart:hover{background:#d1d5db}
+.btn-next{background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff}
+.btn-next:hover{opacity:.9}
+footer{text-align:center;color:#9ca3af;padding:30px 12px;font-size:13px}
+.hidden{display:none!important}
 
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    header {
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      color: white;
-      padding: 28px 18px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    header p {
-      margin: 8px 0 0;
-      opacity: 0.9;
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 24px auto;
-      padding: 0 16px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px;
-      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
-      margin-bottom: 18px;
-    }
-
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      cursor: pointer;
-      font-weight: 700;
-      transition: 0.2s;
-      font-size: 15px;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-    }
-
-    .btn-secondary {
-      background: #e2e8f0;
-      color: var(--text);
-    }
-
-    .btn-secondary:hover {
-      background: #cbd5e1;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .stat {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 24px;
-      color: var(--primary);
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .search-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    input,
-    select {
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      font-size: 15px;
-      outline: none;
-    }
-
-    input {
-      flex: 1;
-      min-width: 220px;
-    }
-
-    select {
-      min-width: 170px;
-    }
-
-    .progress-wrap {
-      height: 10px;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-bottom: 18px;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: var(--primary);
-      transition: 0.3s;
-    }
-
-    .question-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 700;
-      background: #dbeafe;
-      color: #1e40af;
-    }
-
-    .section-title {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-
-    .question-text {
-      font-size: 20px;
-      line-height: 1.65;
-      margin-bottom: 18px;
-    }
-
-    .context-table {
-      background: #0f172a;
-      color: #e2e8f0;
-      border-radius: 14px;
-      padding: 16px;
-      overflow-x: auto;
-      font-family: "Courier New", monospace;
-      font-size: 15px;
-      line-height: 1.35;
-      margin: 0 0 20px;
-      white-space: pre;
-    }
-
-    .answers {
-      display: grid;
-      gap: 10px;
-    }
-
-    .answer-btn {
-      text-align: left;
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    .answer-btn:hover:not(:disabled) {
-      background: #eff6ff;
-      border-color: var(--primary);
-    }
-
-    .answer-btn:disabled {
-      cursor: not-allowed;
-      opacity: 0.98;
-    }
-
-    .answer-btn.correct {
-      background: #dcfce7;
-      border-color: var(--success);
-      color: #14532d;
-    }
-
-    .answer-btn.wrong {
-      background: #fee2e2;
-      border-color: var(--danger);
-      color: #7f1d1d;
-    }
-
-    .feedback {
-      margin-top: 16px;
-      border-radius: 12px;
-      padding: 14px;
-      font-weight: 700;
-      line-height: 1.6;
-    }
-
-    .feedback.correct {
-      background: #dcfce7;
-      color: #14532d;
-      border: 1px solid #86efac;
-    }
-
-    .feedback.wrong {
-      background: #fee2e2;
-      color: #7f1d1d;
-      border: 1px solid #fca5a5;
-    }
-
-    .feedback .detail {
-      margin-top: 8px;
-      font-weight: 600;
-    }
-
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 28px 12px;
-      font-size: 14px;
-    }
-  </style>
+/* Essay Questions Styles */
+.essay-container{background:#fff;border-radius:18px;padding:30px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid #e8e8ee}
+.essay-header{text-align:center;margin-bottom:32px;padding-bottom:20px;border-bottom:3px solid #7c3aed}
+.essay-header h2{font-size:28px;color:#1e293b;margin-bottom:8px}
+.essay-header p{color:#6b7280;font-size:16px}
+.essay-back-btn{display:inline-flex;align-items:center;gap:8px;background:#f3f4f6;color:#374151;padding:10px 16px;border-radius:10px;margin-bottom:20px;cursor:pointer;font-weight:600;transition:.2s}
+.essay-back-btn:hover{background:#e5e7eb;color:#1f2937}
+.essay-questions{display:grid;gap:24px}
+.essay-card{background:linear-gradient(135deg,#f5f3ff 0%,#faf5ff 100%);border:2px solid #e9d5ff;border-radius:16px;padding:24px;transition:.3s}
+.essay-card:hover{box-shadow:0 12px 32px rgba(124,58,237,.15);border-color:#d8b4fe;transform:translateY(-2px)}
+.essay-q-number{display:inline-block;background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;padding:6px 14px;border-radius:20px;font-weight:700;font-size:12px;margin-bottom:12px}
+.essay-q-title{font-size:20px;color:#1e293b;font-weight:700;margin-bottom:16px}
+.essay-content{display:grid;gap:12px}
+.essay-item{background:#fff;padding:14px 16px;border-left:4px solid #7c3aed;border-radius:8px;font-size:15px;line-height:1.7;color:#374151}
+.essay-item strong{color:#1e293b;display:block;margin-bottom:4px}
+footer{text-align:center;color:#9ca3af;padding:30px 12px;font-size:13px}
+</style>
 </head>
-
 <body>
-  <header>
-    <h1>Computer Applications in Project Management Quiz</h1>
-    <p>Answer the question and instantly see the correct answer</p>
-  </header>
+<header>
+<h1>Electronic Business - Final Review</h1>
+<p>Test your knowledge &mdash; answer and instantly see the correct answer</p>
+</header>
+<main>
+<section class="stats" id="statsSection">
+<div class="stat"><strong id="totalCount">0</strong><span>Total</span></div>
+<div class="stat"><strong id="answeredCount">0</strong><span>Answered</span></div>
+<div class="stat"><strong id="scoreCount">0</strong><span>Correct</span></div>
+<div class="stat"><strong id="percentCount">0%</strong><span>Score</span></div>
+</section>
 
-  <main>
-    <section class="stats">
-      <div class="stat">
-        <strong id="totalCount">0</strong>
-        <span>Total Questions</span>
-      </div>
-      <div class="stat">
-        <strong id="answeredCount">0</strong>
-        <span>Answered</span>
-      </div>
-      <div class="stat">
-        <strong id="scoreCount">0</strong>
-        <span>Correct</span>
-      </div>
-      <div class="stat">
-        <strong id="percentCount">0%</strong>
-        <span>Score</span>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="search-row">
-  <select id="typeFilter" onchange="applyFilters()">
-    <option value="all">All Types</option>
-    <option value="tf">True / False</option>
-    <option value="mcq">MCQ</option>
-  </select>
-
-  <select id="statusFilter" onchange="applyFilters()">
-    <option value="all">All Status</option>
-    <option value="unanswered">Unanswered</option>
-    <option value="answered">Answered</option>
-    <option value="wrong">Wrong Only</option>
-  </select>
+<section class="card" id="quizSection">
+<div class="mode-selector">
+<button class="mode-btn active" onclick="switchMode('quiz')"> Quiz Questions</button>
+<button class="mode-btn" onclick="switchMode('essay')"> Essay Questions</button>
 </div>
 
-      <div class="progress-wrap">
-        <div id="progressBar" class="progress-bar"></div>
-      </div>
+<div id="quizContent">
+<div class="filters">
+<select id="chapterFilter" onchange="applyFilters()"><option value="all">All Chapters</option></select>
+<select id="typeFilter" onchange="applyFilters()"><option value="all">All Types</option><option value="tf">True / False</option><option value="mcq">MCQ</option></select>
+<select id="statusFilter" onchange="applyFilters()"><option value="all">All Status</option><option value="unanswered">Unanswered</option><option value="answered">Answered</option><option value="wrong">Wrong Only</option></select>
+</div>
+<div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+<div id="questionCard"></div>
+<div class="nav">
+<button class="btn-prev" onclick="prev()">◀ Previous</button>
+<button class="btn-restart" onclick="restart()">↻ Restart</button>
+<button class="btn-next" onclick="next()">Next ▶</button>
+</div>
+</div>
 
-      <div id="questionCard"></div>
+<div id="essayContent" class="hidden">
+<button class="essay-back-btn" onclick="switchMode('quiz')">← Back to Quiz</button>
+<div class="essay-container">
+<div class="essay-header">
+<h2>📚 Theoretical Knowledge</h2>
+<p>Read and understand these essential e-commerce concepts</p>
+</div>
+<div class="essay-questions" id="essayQuestionsContainer"></div>
+</div>
+</div>
+</section>
+</main>
+<footer>E-Commerce &mdash; Interactive Quiz &amp; Learning Platform</footer>
 
-      <div class="nav">
-        <button class="btn-secondary" onclick="previousQuestion()">Previous</button>
-        <button class="btn-secondary" onclick="restartQuiz()">Restart</button>
-        <button class="btn-primary" onclick="nextQuestion()">Next</button>
-      </div>
-    </section>
-  </main>
+<script>
+const Q=[
+// ═══════════════════════════════════════════
+// Ch.1: E-Business Fundamentals — True/False
+// ═══════════════════════════════════════════
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 1",question:"The digital shift in modern business has led the organization moved from paper-based methods to digital planning, execution and communication.",correct:"True"},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 2",question:"Financial inclusion is considered one of the recent developments associated with digital transformation in the Egyptian business environment.",correct:"True"},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 3",question:"A digital organization is characterized by fragmented electronic systems, non-virtual teams, and more administrative layers.",correct:"False",reason:"A digital organization is characterized by integrated e-systems, virtual teams and remote work, and fewer administrative layers."},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 4",question:"E-business refers to the integrated use of digital technology in buying and selling processes.",correct:"True"},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 5",question:"The concept of e-business includes five strategic pillars: infrastructure- information systems- connectivity - Human capital -innovation culture.",correct:"True"},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 6",question:"In traditional business, work can be performed remotely without spatial or temporal constraints.",correct:"False",reason:"Traditional business requires an on-site physical presence and face-to-face transactions. It is E-business that allows remote work without spatial or temporal constraints, providing 24/7 global reach."},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 7",question:"In e-business, the market scope is global, allowing access to international customers at any time.",correct:"True"},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 8",question:"E-business is characterized by Experience based decision making.",correct:"False",reason:"E-business is characterized by being Data-Driven, using integrated MIS to provide real-time data for precise decision-making. Traditional business is the one characterized by experience-based decision making."},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 9",question:"E-commerce is broader and more comprehensive than e-business.",correct:"False",reason:"E-business is the broader and more comprehensive holistic framework that includes all organizational functions. E-commerce is just a subset of E-business focused mainly on transactional and external activities (buying and selling)."},
+{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 10",question:"The E-business has a cross functional integration where the E-commerce has a partial integration.",correct:"True"},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 11",question:"One of the strategic pillars of e-business is:",options:[{label:"a",text:"infrastructure"},{label:"b",text:"innovation culture"},{label:"c",text:"human capital"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The 5 strategic pillars of e-business are Infrastructure, Information Systems, Connectivity, Human Capital, and Innovation Culture."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 12",question:"E-business is characterized by:",options:[{label:"a",text:"A digital environment"},{label:"b",text:"A limited Reach"},{label:"c",text:"A Rigid structure"},{label:"d",text:"All of the above"}],correct:"a",explanation:"E-business operates in a digital and networked environment. Options B (Limited Reach) and C (Rigid Structure) are characteristics of a traditional physical business."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 13",question:"Traditional business is characterized by:",options:[{label:"a",text:"A physical environment"},{label:"b",text:"Limited reach"},{label:"c",text:"High Overhead"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Traditional business relies on a physical environment, is confined to local/regional markets (limited reach), and incurs high overhead costs due to heavy reliance on physical assets and labor."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 14",question:"The scope of e-business includes:",options:[{label:"a",text:"A hostlic scope covering all internal and external organizational functions"},{label:"b",text:"A scope limited to buying and selling transactions"},{label:"c",text:"A partial scope covering only internal functions"},{label:"d",text:"None of the above"}],correct:"a",explanation:"E-business has a holistic scope that includes all organizational functions (HR, Finance, Production) beyond just transactions, creating value for both internal and external stakeholders."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 15",question:"The first stage in the evolution of e-business is:",options:[{label:"a",text:"Internal IT use"},{label:"b",text:"Internet and communication"},{label:"c",text:"Electronic integration"},{label:"d",text:"Advanced E- Business"}],correct:"a",explanation:"The first development stage of E-business is \"Internal IT Use\", which focuses on operational efficiency like accounting and data storage with limited integration."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 16",question:"The third stage in the evolution of e-business is:",options:[{label:"a",text:"Internal IT use"},{label:"b",text:"Internet and communication"},{label:"c",text:"Electronic integration"},{label:"d",text:"Advanced E- Business"}],correct:"c",explanation:"The third stage is \"Electronic Integration\", where organizations adopt ERP, CRM, and SCM systems to create cross-functional data flow and improve decision-making."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 17",question:"The stage associated with the use of Artificial Intelligence tools in e-business is:",options:[{label:"a",text:"Internal IT use"},{label:"b",text:"Internet and communication"},{label:"c",text:"Electronic integration"},{label:"d",text:"Advanced E- Business"}],correct:"d",explanation:"The fourth stage, \"Advanced E-Business\", is characterized by strategic agility and the use of modern tools like Cloud, Mobile, Big Data, and AI (Artificial Intelligence)."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 18",question:"Tools such as Google Workspace are primarily used for:",options:[{label:"a",text:"Digital marketing"},{label:"b",text:"Customer Relationship Management (CRM)"},{label:"c",text:"Collaboration and teamwork"},{label:"d",text:"Financial Support"}],correct:"c",explanation:"In the modern digital ecosystem, tools like Google Workspace and Microsoft 365 are categorized specifically under \"Collaboration\"."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 19",question:"Tools such as SAP SuccessFactors are primarily used for:",options:[{label:"a",text:"Digital marketing"},{label:"b",text:"Human Resource Management (HRM)"},{label:"c",text:"Digital collaboration and teamwork"},{label:"d",text:"Financial analysis and support"}],correct:"b",explanation:"SAP SuccessFactors and Oracle HCM are specialized tools used for E-HRM (Electronic Human Resource Management) and talent management."},
+{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 20",question:"Tools such as Meta Ads Manager are primarily used for:",options:[{label:"a",text:"Digital marketing"},{label:"b",text:"Human Resource Management"},{label:"c",text:"Digital collaboration and teamwork"},{label:"d",text:"Financial analysis and support"}],correct:"a",explanation:"Meta Ads, Google Ads, and Analytics are the primary digital ecosystem tools used for Digital Marketing."},
 
-  <footer>
-    Computer Applications in Project Management - Interactive Quiz
-  </footer>
+// ═══════════════════════════════════════════════════
+// Ch.2: Digital Value & Business Models — True/False
+// ═══════════════════════════════════════════════════
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 1",question:"Digital value refers to the benefit obtained by the customer or the organization as a result of using digital technologies.",correct:"True"},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 2",question:"The use and analysis of data is considered one of the mechanisms for creating digital value.",correct:"True"},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 3",question:"In the direct online sales model, the organization acts as an intermediary between multiple parties such as sellers and buyers.",correct:"False",reason:"In the direct online sales model, organizations sell directly to customers without intermediaries. It is the \"Platform-Based\" model where the organization acts as a digital intermediary connecting multiple parties."},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 4",question:"In the freemium model, the organization provides free content or services to users and relies on advertising as the primary source of revenue.",correct:"False",reason:"The freemium model offers basic services for free to attract users, while advanced features require payment. Providing free content to users and generating revenue primarily through targeted advertising is the definition of the \"Advertising-Based\" model."},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 5",question:"In the subscription model, the organization provides a digital service or content in exchange for periodic or recurring fees.",correct:"True"},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 6",question:"The digital differentiation strategy relies on using technology and automation to reduce operational costs.",correct:"False",reason:"The strategy that relies on minimizing operational costs through automation to offer competitive pricing is called \"Digital Cost Leadership\". The \"Digital Differentiation\" strategy focuses on delivering distinctive digital value, quality, and superior customer experience regardless of price."},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 7",question:"The platform strategy is based on targeting a specific niche market.",correct:"False",reason:"Targeting a specific niche market with highly tailored digital solutions is the \"Digital Focus\" strategy. The \"Platform Strategy\" relies on orchestrating a digital ecosystem that facilitates interactions between multiple parties."},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 8",question:"The continuous innovation strategy focuses on building a multi-sided digital ecosystem that enables interaction between producers and consumers.",correct:"False",reason:"Building a digital ecosystem to enable interaction is the definition of the \"Platform Strategy\". The \"Continuous Innovation\" strategy prioritizes the ongoing evolution of products and early adoption of emerging tech based on data analysis."},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 9",question:"Focusing on customer experience is considered one of the success factors of e-business.",correct:"True"},
+{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 10",question:"The low digital competition is considered one of the challenges of e-business.",correct:"False",reason:"The challenge is actually \"High Digital Competition\", as low barriers to entry in the digital environment create intense rivalry, requiring strong differentiation to survive."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 11",question:"One of the characteristics of digital value in e-business is:",options:[{label:"a",text:"Data Driven value"},{label:"b",text:"Personalization"},{label:"c",text:"Continuous interaction"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The key characteristics of digital value include being Data-Driven, offering Ubiquitous Access, Personalization, and Continuous Interaction between the organization and customers."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 12",question:"One of the mechanisms for creating digital value is:",options:[{label:"a",text:"Enhance customer experience"},{label:"b",text:"Digital advertising"},{label:"c",text:"Customer loyalty"},{label:"d",text:"All of the above"}],correct:"a",explanation:"According to the e-business framework, the four mechanisms for creating digital value are: 1. Use & Analysis of Data, 2. Deploy Digital Technologies, 3. Enhance Customer Experience, and 4. Achieve Operational Efficiency."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 13",question:"One of the components of the e-business model is:",options:[{label:"a",text:"Value proposition, physical environment, and customer experience"},{label:"b",text:"Digital channels, customer segments, and revenue streams"},{label:"c",text:"Key partners, cost structure, and revenue distribution"},{label:"d",text:"None of the above"}],correct:"b",explanation:"An E-Business Model consists of 9 core components, which include Digital Channels, Customer Segments, and Revenue Streams. (Option A is incorrect because \"physical environment\" belongs to traditional business)."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 14",question:"Uber is an example of:",options:[{label:"a",text:"Direct online sales model"},{label:"b",text:"Platform-based model"},{label:"c",text:"Subscription model"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Uber acts as a digital intermediary connecting drivers with users, generating value via connection without owning the physical vehicles, making it a prime example of the Platform-Based model."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 15",question:"Spotify is an example of:",options:[{label:"a",text:"Subscription model"},{label:"b",text:"Freemium model"},{label:"c",text:"Advertising-based model"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Spotify uses the Freemium model by offering free basic access with limits, while premium subscriptions unlock full features."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 16",question:"Relying on periodic service updates and rapid adoption of emerging technologies reflects:",options:[{label:"a",text:"Platform strategy"},{label:"b",text:"Continuous innovation strategy"},{label:"c",text:"Digital focus strategy"},{label:"d",text:"Digital differentiation strategy"}],correct:"b",explanation:"The Continuous Innovation strategy prioritizes ongoing evolution, data-informed improvement, periodic service updates, and the early adoption of emerging technologies."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 17",question:"Providing unique digital value that makes customers choose the organization based on quality and distinction refers to:",options:[{label:"a",text:"Platform strategy"},{label:"b",text:"Digital focus strategy"},{label:"c",text:"Digital innovation strategy"},{label:"d",text:"None of the above"}],correct:"d",explanation:"The correct term for this strategy is \"Digital Differentiation\". Since it is not listed among the choices (A, B, or C), \"None of the above\" is the strictly correct answer."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 18",question:"One of the success factors of e-business is:",options:[{label:"a",text:"Clear digital value"},{label:"b",text:"Effective technological infrastructure"},{label:"c",text:"Focus on customer experience"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Key success factors for E-Business include delivering Clear Digital Value, building a robust Technological Infrastructure, and focusing heavily on Customer Experience (CX)."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 19",question:"One of the success factors of e-business is:",options:[{label:"a",text:"High digital competition"},{label:"b",text:"Cybersecurity and data protection issues"},{label:"c",text:"Rapid technological change"},{label:"d",text:"None of the above"}],correct:"d",explanation:"Options A, B, and C are all considered major \"Challenges\" or barriers in e-business, not success factors. Therefore, none of the above is correct."},
+{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 20",question:"One of the challenges of e-business is:",options:[{label:"a",text:"High digital competition"},{label:"b",text:"Building digital trust"},{label:"c",text:"Rapid technological change"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The major challenges facing e-business are High Digital Competition, Cybersecurity, Building Trust, and keeping up with Rapid Technological Change."},
 
-  <script>
-    const tableContext = `Based on this table:
-┌──────────┬───────────────┬──────────────┐
-│ The task │ The previous  │ The duration │
-│          │     task      │              │
-├──────────┼───────────────┼──────────────┤
-│    A     │       -       │      5       │
-│    B     │       A       │      15      │
-│    C     │       A       │      10      │
-│    D     │       A       │      5       │
-│    E     │     B & C     │      15      │
-│    F     │   C & B & D   │      10      │
-│    G     │       F       │      170     │
-│    H     │     E & G     │      35      │
-└──────────┴───────────────┴──────────────┘`;
+// ════════════════════════════════
+// Ch.3: E-Commerce — True/False
+// ════════════════════════════════
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 1",question:"E-commerce refers to conducting commercial activities related only to the exchange of goods and services through electronic means.",correct:"False",reason:"E-commerce goes beyond simple online selling; it involves the execution of commercial activities and transactions involving the exchange of goods, services, AND information through electronic means."},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 2",question:"The e-commerce process begins with order processing.",correct:"False",reason:"The e-commerce process begins with the \"Present\" stage (providing product information and specifications through the digital platform). Order processing is the second stage, called the \"Process\" stage."},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 3",question:"Alibaba.com is an example of Business-to-Consumer (B2C) e-commerce.",correct:"False",reason:"Alibaba.com is a global wholesale marketplace, which makes it an example of Business-to-Business (B2B) e-commerce. Amazon is the primary retail example for Business-to-Consumer (B2C)."},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 4",question:"Amazon is an example of Business-to-Consumer (B2C) e-commerce.",correct:"True"},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 5",question:"The Digital Egypt Portal is an example of Business-to-Government (B2G) e-commerce.",correct:"False",reason:"The Digital Egypt Portal provides government services and licenses directly to citizens, making it an example of Government-to-Consumer (G2C) e-commerce."},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 6",question:"One of the advantages of e-commerce is the reduction of operating costs.",correct:"True"},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 7",question:"One of the disadvantages of e-commerce is legal complexity.",correct:"True"},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 8",question:"A payment gateway refers to the technological intermediary between the consumer and the online store.",correct:"False",reason:"A payment gateway serves as the technological intermediary routing authorization requests and encrypting data between the merchant website and the banking system, not between the consumer and the online store."},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 9",question:"According to the electronic payment cycle, the authorization stage comes immediately after encryption.",correct:"False",reason:"According to the electronic payment cycle, the stage that comes immediately after Gateway Encryption & Request is \"Routing\" (the card network routes the authorization request to the issuing bank). Authorization happens after routing."},
+{type:"tf",section:"Ch.3: E-Commerce",number:"Question 10",question:"One of the legal challenges facing e-commerce is the lack of recognition of electronic contracts in some countries.",correct:"True"},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 11",question:"The e-commerce process includes:",options:[{label:"a",text:"Product presentation"},{label:"b",text:"Order processing"},{label:"c",text:"Electronic payment"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The comprehensive e-commerce process flow consists of 5 stages: 1. Present (product presentation), 2. Process (order processing), 3. Pay (electronic payment), 4. Fulfill, and 5. Support. Therefore, all listed options are correct."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 12",question:"When companies provide services directly to individuals, this is considered:",options:[{label:"a",text:"B2B"},{label:"b",text:"B2G"},{label:"c",text:"B2E"},{label:"d",text:"None of the above"}],correct:"d",explanation:"Transactions conducted directly between companies and the final consumer are classified as Business-to-Consumer (B2C). Since B2C is not listed in options A, B, or C, the correct choice is None of the above."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 13",question:"When companies provide services to government entities, this is considered:",options:[{label:"a",text:"B2B"},{label:"b",text:"B2G"},{label:"c",text:"G2B"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Commercial transactions conducted between private companies and government entities for tenders, bids, and public procurement are classified as Business-to-Government (B2G)."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 14",question:"When individuals provide services to companies through platforms such as Upwork, this is considered:",options:[{label:"a",text:"B2B"},{label:"b",text:"B2G"},{label:"c",text:"C2B"},{label:"d",text:"None of the above"}],correct:"c",explanation:"The Consumer-to-Business (C2B) model involves individuals offering value, freelance services, or crowdsourcing to business entities. Upwork is a primary example of this model."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 15",question:"One of the advantages of e-commerce is:",options:[{label:"a",text:"Geographic depth"},{label:"b",text:"Limited working hours"},{label:"c",text:"Speed of execution"},{label:"d",text:"All of the above"}],correct:"c",explanation:"Speed of execution is a major advantage, offering high flexibility to adjust prices and update inventory instantly. Option A is wrong because it provides geographic *expansion* (not depth), and B is wrong because it provides 24/7 availability (not limited hours)."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 16",question:"Components of e-commerce infrastructure include:",options:[{label:"a",text:"Technical infrastructure"},{label:"b",text:"Network and connectivity infrastructure"},{label:"c",text:"Electronic payment systems"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The infrastructure forming the backbone of digital commercial operations consists of 6 components: Technical Infrastructure, Network & Connectivity, Electronic Payment Systems, Database Management Systems, Security Systems, and Operational Integration."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 17",question:"According to the electronic payment cycle, the bank verifies the customer's balance and approves the transaction during the:",options:[{label:"a",text:"Encryption stage"},{label:"b",text:"Routing stage"},{label:"c",text:"Authorization stage"},{label:"d",text:"Fund Hold stage"}],correct:"c",explanation:"During the Authorization stage, the issuing bank verifies the card's validity and available balance, then approves or declines the transaction."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 18",question:"According to the electronic payment cycle, funds are transferred to the merchant's account after the:",options:[{label:"a",text:"Purchase stage"},{label:"b",text:"Authorization stage"},{label:"c",text:"Settlement stage"},{label:"d",text:"Routing stage"}],correct:"c",explanation:"Settlement is the final phase of the electronic payment cycle where funds are actually transferred to the merchant's account after clearing and fee deductions."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 19",question:"One of the legal and regulatory challenges of e-commerce is:",options:[{label:"a",text:"Consumer protection"},{label:"b",text:"Intellectual property"},{label:"c",text:"Privacy and data protection"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Digital compliance and cross-border regulations introduce several challenges, including Consumer Protection, Intellectual Property, Data Privacy (like GDPR), E-Contracts Recognition, and Taxation."},
+{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 20",question:"One of the disadvantages of e-commerce is:",options:[{label:"a",text:"Changing competition"},{label:"b",text:"Legal facilitation"},{label:"c",text:"High return rates"},{label:"d",text:"All of the above"}],correct:"c",explanation:"High return rates are a major operational disadvantage. The inability to try or inspect products beforehand leads to higher return volumes, which significantly increases reverse logistics costs."},
 
-    const questions = [
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 1",
-        question: "A project is a set of activities and events arranged in a logical sequence.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 2",
-        question: "The Critical Path Method (CPM) is defined as a group of consecutive activities that form the longest path in the network.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 3",
-        question: "In a node network diagram, activities are represented by nodes (circles), while arrows represent the start or finish of each activity.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 4",
-        question: "A critical activity is an activity whose delay does not affect the project completion date.",
-        correct: "False",
-        reason: "A critical activity is one whose delay during execution will cause a corresponding delay to the entire project."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 5",
-        question: "An Event is a specific point in time that requires no duration or resources.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 6",
-        question: "A Dummy Activity consumes time and resources and is used only to show logical sequence.",
-        correct: "False",
-        reason: "A Dummy Activity is an activity that does not require time or resources to complete and is used only to indicate the logical sequence of activities."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 7",
-        question: "The critical path starts at the beginning of the project and ends at its conclusion.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 8",
-        question: "A Finish-to-Start (FS) relationship means the predecessor task must be finished before starting the current task.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 9",
-        question: "An activity is reaching a specific point in time and does not require a beginning and end time.",
-        correct: "False",
-        reason: "This is the definition of an \"Event\". An \"Activity\" is an effort that requires a beginning, an end, and resources for its execution."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 10",
-        question: "To monitor project progress, only project inputs and outputs should be monitored.",
-        correct: "False",
-        reason: "Project control encompasses monitoring project inputs, processes, and outputs, not just inputs and outputs."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 11",
-        question: "An event is an effort that requires a beginning and end point and resources for its execution.",
-        correct: "False",
-        reason: "This is the definition of an \"Activity\". An \"Event\" is reaching a specific point in time that does not require duration or resources."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 12",
-        question: "Three times estimates must be known in the Critical Path Method to calculate the expected time for each activity.",
-        correct: "False",
-        reason: "Three time estimates are used in the PERT Method, not the Critical Path Method (CPM)."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 13",
-        question: "Time elasticity is calculated by calculating the difference between the early and late finishes.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 14",
-        question: "The Finish-to-Finish (FF) relationship states that a dependent task cannot be completed until the preceding task has begun.",
-        correct: "False",
-        reason: "The Finish-to-Finish (FF) relationship means a task cannot be completed until the preceding task has been completed."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 15",
-        question: "Reporting is used to determine the current project status and illustrate project progress.",
-        correct: "True"
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 16",
-        question: "The following relationship (Critical Path Time - Target Time) / (Standard Deviation) is used to calculate the variance value.",
-        correct: "False",
-        reason: "This relationship is used to calculate the \"Project completion probability\", not the variance. Also, the correct formula is (Target Time - Critical Path Time) / Standard Deviation."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 17",
-        question: "The pessimistic time is the minimum time required to complete a task.",
-        correct: "False",
-        reason: "The pessimistic time is the maximum time required to complete a task. The optimistic time is the minimum time."
-      },
-      {
-        type: "tf",
-        section: "True or False",
-        number: "Question 18",
-        question: "The time elasticity of critical activities is zero.",
-        correct: "True"
-      },
-      {
-  type: "tf",
-  section: "True or False",
-  number: "Question 19",
-  question: "During the Forward Pass calculation in a network diagram, if an activity receives multiple incoming arrows, you should choose the smallest Early Finish (EF) time of the preceding activities to be its Early Start (ES).",
-  correct: "False",
-  explanation: "When moving forward (Forward Pass), if multiple paths merge, you must select the largest (maximum) Early Finish (EF) time of the preceding activities, because the current activity cannot start until ALL its predecessors are entirely finished."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 20",
-  question: "A Dummy Activity is represented by a dashed arrow and is crucial for showing logical dependencies, despite consuming zero time and zero resources.",
-  correct: "True",
-  explanation: "Dummy activities are used strictly to maintain the correct logical sequence in complex network diagrams without affecting the project's total duration or budget."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 21",
-  question: "If the total variance of the critical path increases significantly, the probability of finishing the project on a strict, early target date will generally decrease.",
-  correct: "True",
-  explanation: "A higher variance means there is a greater degree of uncertainty and risk in the time estimates, making it much harder to guarantee completion by an aggressive target date."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 22",
-  question: "In MS-Project, setting a \"Start-to-Start\" (SS) relationship means that the successor task cannot finish until the predecessor task starts.",
-  correct: "False",
-  explanation: "A Start-to-Start (SS) relationship means the successor task cannot *start* unless the predecessor task *starts*."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 23",
-  question: "When calculating the Expected Time (E) in the PERT method, the highest mathematical weight is given to the Optimistic time (O).",
-  correct: "False",
-  explanation: "The highest weight is given to the Probable time (M), which is multiplied by 4 in the formula: E = (O + 4M + P) / 6."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 24",
-  question: "The standard deviation of the entire project is calculated by simply adding the standard deviations of all the critical activities together.",
-  correct: "False",
-  explanation: "You cannot directly add standard deviations. You must sum the *variances* ($\\sigma^2$) of the critical activities first, and then take the square root of that total sum to find the project's standard deviation."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 25",
-  question: "According to the project management cycle, the \"Resource Management\" element focuses exclusively on securing financial and monetary assets.",
-  correct: "False",
-  explanation: "Resource management focuses on identifying and securing the appropriate *operational* and *human* resources fundamental to developing the project plan. Financial aspects fall under \"Budgeting\"."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 26",
-  question: "If a non-critical activity is delayed by a number of days that is exactly equal to its Total Slack, the overall project duration will remain unchanged.",
-  correct: "True",
-  explanation: "Total Slack is the maximum amount of time a task can be delayed without delaying the project. If the delay does not exceed the slack, the project end date is safe (though the activity's slack will now become zero, making it critical)."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 27",
-  question: "The 'Total Slack' column in MS-Project automatically calculates the flexibility of tasks, eliminating the need to manually subtract Early Start from Late Start.",
-  correct: "True",
-  explanation: "MS-Project automates this calculation. Any task showing a Total Slack of \"0 days\" is automatically recognized by the software as a critical activity."
-},
-{
-  type: "tf",
-  section: "True or False",
-  number: "Question 28",
-  question: "According to the project management elements, \"Reports\" are primarily drafted during the initial planning stage before any project execution begins.",
-  correct: "False",
-  explanation: "Reports are a continuous tracking tool used during project execution to illustrate the current status, progress, and relationship between the timeframe and expenses."
-},
+// ═══════════════════════════════
+// Ch.4: E-Retailing — True/False
+// ═══════════════════════════════
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 1",question:"The concept of E-Retailing is broader and more comprehensive than E-Commerce.",correct:"False",reason:"E-Commerce is the broader umbrella that encompasses multiple transaction types (B2B, C2C, G2C) and focuses on the infrastructure. E-Retailing is a specific, narrower concept that focuses only on the end-to-end customer experience for the final consumer."},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 2",question:"The concept of E-Retailing is more closely associated with electronic commerce models such as B2C and B2B.",correct:"False",reason:"The concept of E-Retailing is specifically associated with the B2C (Business-to-Consumer) model only, as it targets the final consumer. It does not target B2B (Business-to-Business)."},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 3",question:"In a standalone online store, the platform allows other sellers to display their products.",correct:"False",reason:"In a Standalone Store, a company owns its website and sells directly to consumers with full operational and brand control. Allowing other sellers to display their products is characteristic of an Online Marketplace or a Hybrid Model."},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 4",question:"In multi-vendor online marketplaces, the platform owns products that it sells directly to the final consumer.",correct:"False",reason:"An Online Marketplace acts as a platform intermediary connecting multiple sellers to buyers without owning physical assets or inventory. Owning the products directly is a characteristic of a Standalone Store."},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 5",question:"In the dropshipping model, the store does not keep physical inventory; instead, when an order is placed, the order details are sent to the supplier who ships the product directly to the customer.",correct:"True"},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 6",question:"Among the success factors of social commerce are visual content and High engagement.",correct:"True"},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 7",question:"It is preferable for companies to shift from an Omnichannel strategy to a Multichannel strategy.",correct:"False",reason:"It is preferable to shift from a Multichannel strategy (which has fragmented channels and disconnected data silos) to an Omnichannel strategy, which is the ultimate strategic goal for providing unified data and a seamless cross-channel customer journey."},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 8",question:"In dynamic pricing, prices are determined based on close monitoring of competitors in order to maintain market share.",correct:"False",reason:"Monitoring and matching competitor prices to protect market share is the definition of \"Competitive Pricing\". \"Dynamic Pricing\" refers to making real-time algorithmic adjustments based on market fluctuations and demand."},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 9",question:"The use of coupons, free shipping, and seasonal promotions refers to psychological pricing.",correct:"False",reason:"The use of coupons, free shipping thresholds, and limited-time offers is defined as \"Promotional Pricing\". \"Psychological Pricing\" leverages behavioral cues like charm pricing (e.g., $19.99) and scarcity cues (e.g., \"Only 2 left\")."},
+{type:"tf",section:"Ch.4: E-Retailing",number:"Question 10",question:"Value-based pricing means setting the price based on the customer's perceived value.",correct:"True"},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 11",question:"One of the characteristics of a standalone online store is:",options:[{label:"a",text:"Rapid expansion in product assortment"},{label:"b",text:"Revenue from commissions and services"},{label:"c",text:"The company fully controls inventory management and brand"},{label:"d",text:"All of the above"}],correct:"c",explanation:"The primary characteristic of a standalone store is that the company owns its website/app and sells directly, allowing for full control over inventory, marketing, and the brand. Options A and B are characteristics of Marketplaces."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 12",question:"One of the characteristics of online marketplaces is:",options:[{label:"a",text:"Rapid expansion in product assortment"},{label:"b",text:"low inventory risk"},{label:"c",text:"dependent on seller"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Online marketplaces connect buyers and sellers, which allows for a high product assortment and low inventory risk. However, the customer experience is highly dependent on the quality of those third-party sellers."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 13",question:"One of the advantages of the dropshipping model is:",options:[{label:"a",text:"No need for large capital investment in inventory"},{label:"b",text:"Difficulty in controlling product quality"},{label:"c",text:"Customer experience depends on the supplier"},{label:"d",text:"None of the above"}],correct:"a",explanation:"Because the store takes orders but holds no stock, the main advantage is zero inventory risk and low capital requirement. Options B and C are disadvantages, not advantages."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 14",question:"One of the disadvantages of the dropshipping model is:",options:[{label:"a",text:"Difficulty in controlling product quality"},{label:"b",text:"Relatively low profit margins"},{label:"c",text:"Customer experience depends on the supplier"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Since suppliers ship directly to the customer, the store has less control over shipping speed and product quality. Additionally, because the store is essentially just an order-taker, it yields relatively low profit margins."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 15",question:"To achieve useability and navigation in the user experience on an e-commerce platform, there should be:",options:[{label:"a",text:"prominent \"add to cart\" actions"},{label:"b",text:"Auto suggest search engine"},{label:"c",text:"Advanced filters and clear categories"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Usability and Navigation (one of the six UX pillars) requires intuitive structures like advanced filtering, clear categories, auto-suggest search engines, and prominent \"Add to Cart\" buttons to reduce user friction."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 16",question:"One of the key factors for increasing the conversion rate and improving the customer experience is:",options:[{label:"a",text:"Personalization"},{label:"b",text:"checkout experience"},{label:"c",text:"post-purchase experience"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The six key pillars that drive conversion and customer loyalty include Personalization, Checkout Experience, and Post-Purchase experience, along with Usability, Speed, and Trust."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 17",question:"To protect market share, companies should follow:",options:[{label:"a",text:"psychological pricing"},{label:"b",text:"Dynamic pricing"},{label:"c",text:"Competitive pricing"},{label:"d",text:"None of the above"}],correct:"c",explanation:"Competitive Pricing relies on monitoring and matching (or slightly undercutting) competitor prices specifically to protect market share in transparent markets."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 18",question:"Using prices such as 9.99 or visually highlighting discounts refers to:",options:[{label:"a",text:"Psychological pricing"},{label:"b",text:"Dynamic pricing"},{label:"c",text:"Competitive pricing"},{label:"d",text:"None of the above"}],correct:"a",explanation:"Psychological Pricing leverages behavioral cues to influence the perception of value, such as using charm pricing (e.g., $19.99) or visually emphasizing discounts and scarcity."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 19",question:"Offering unique prices to specific customer segments based on their behavioral data and history refers to:",options:[{label:"a",text:"Promotional pricing"},{label:"b",text:"Personalized pricing"},{label:"c",text:"Value-based pricing"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Personalized Pricing involves tailoring prices and loyalty-based special offers to individual segments based on their specific behavioral data and history."},
+{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 20",question:"Adjusting prices in real time based on algorithms that analyze market fluctuations refer to:",options:[{label:"a",text:"Value-based pricing"},{label:"b",text:"Dynamic pricing"},{label:"c",text:"Personalized pricing"},{label:"d",text:"All of the above"}],correct:"b",explanation:"Dynamic Pricing utilizes real-time algorithmic adjustments that respond to market fluctuations, seasonality, and demand to maximize revenue."},
 
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 1",
-        question: "Late Finish (LF) time is:",
-        options: [
-          { label: "a", text: "The earliest time an activity can be completed." },
-          { label: "b", text: "The latest time an activity can be completed without delaying subsequent activities." },
-          { label: "c", text: "The sum of ES and EF times." },
-          { label: "d", text: "The time required to start the project." }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 2",
-        question: "The final step in applying the Critical Path Method is:",
-        options: [
-          { label: "a", text: "Drawing tasks." },
-          { label: "b", text: "Estimating time." },
-          { label: "c", text: "Updating the network diagram periodically during execution." },
-          { label: "d", text: "Identifying relationships." }
-        ],
-        correct: "c"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 3",
-        question: "In a (Finish-to-Finish - FF) relationship:",
-        options: [
-          { label: "a", text: "The task cannot be completed until the predecessor is finished." },
-          { label: "b", text: "The task starts with the predecessor's start." },
-          { label: "c", text: "The task finishes before the predecessor starts." },
-          { label: "d", text: "No relationship exists between tasks." }
-        ],
-        correct: "a"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 4",
-        question: "Time Slack for each task is calculated by:",
-        options: [
-          { label: "a", text: "Late Finish - Early Finish." },
-          { label: "b", text: "Late Start - Early Start." },
-          { label: "c", text: "Both are correct." },
-          { label: "d", text: "None of the above." }
-        ],
-        correct: "c"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 5",
-        question: "An effort that requires a start and end point and resources for execution is:",
-        options: [
-          { label: "a", text: "Event." },
-          { label: "b", text: "Activity." },
-          { label: "c", text: "Node Network." },
-          { label: "d", text: "Path." }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 6",
-        question: "The Critical Path connects:",
-        options: [
-          { label: "a", text: "Non-critical activities." },
-          { label: "b", text: "Critical activities." },
-          { label: "c", text: "Dummy activities only." },
-          { label: "d", text: "Random events." }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 7",
-        question: "The purpose of drawing activities on a network diagram is to:",
-        options: [
-          { label: "a", text: "Know the project cost only." },
-          { label: "b", text: "Represent activities according to the existing relationships between them." },
-          { label: "c", text: "Reduce the number of workers." },
-          { label: "d", text: "Cancel non-critical activities." }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Question 8",
-        question: "A (Start-to-Start - SS) relationship means:",
-        options: [
-          { label: "a", text: "The successor task cannot start unless the first task starts." },
-          { label: "b", text: "A task finishes when another starts." },
-          { label: "c", text: "A task does not finish until the previous one finishes." },
-          { label: "d", text: "An illogical relationship." }
-        ],
-        correct: "a"
-      },
+// ═══════════════════════════════════════════
+// Ch.5: Digital Transformation — True/False
+// ═══════════════════════════════════════════
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 1",question:"The concept of digital transformation is limited to using digital technologies in operations without the need to redesign them.",correct:"False",reason:"Digital transformation is not simply about adopting new technologies; it requires a fundamental rethinking and redesigning of how businesses operate, their business models, and how they deliver value to customers."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 2",question:"Digitization means using digital technology and automating processes to improve efficiency within the organization.",correct:"False",reason:"Using digital technology and data to improve and automate existing business processes is the definition of \"Digitalization\". \"Digitization\" is only the process of converting information from physical formats into digital forms."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 3",question:"Digitalization refers to converting information from a physical form into a digital form.",correct:"False",reason:"Converting information from a physical form to a digital form (like scanning a paper to PDF) is called \"Digitization\". \"Digitalization\" involves automating and improving processes."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 4",question:"Digital transformation means completely redesigning the business model and creating new value using technology.",correct:"True"},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 5",question:"Technologies supporting digital transformation include cloud computing, big data analytics, artificial intelligence, and the Internet of Things.",correct:"True"},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 6",question:"The first stage of digital transformation is digital experimentation.",correct:"False",reason:"The first stage is \"Digital Awareness\", where leadership recognizes the strategic importance of digital technologies. \"Digital Experimentation\" is the second stage."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 7",question:"One of the challenges facing digital transformation in organizations is increasing digital skills and cybersecurity.",correct:"False",reason:"The actual challenges are the \"Lack of Digital Skills\" (shortage of talent) and the high \"Cybersecurity Risks\", not the increase of skills and security."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 8",question:"Using digital recruitment platforms and AI for screening is a form of digital transformation in marketing management.",correct:"False",reason:"Using digital recruitment platforms, AI screening, and e-learning are forms of digital transformation in Human Resource Management (HRM), not Marketing Management."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 9",question:"Digital transformation in operations management is not limited to introducing technology but also includes changing organizational culture and how daily tasks are executed.",correct:"True"},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 10",question:"ERP systems manage materials and core operations within an organization through multiple platforms and a decentralized database.",correct:"False",reason:"ERP systems connect various business functions into a single, cohesive system through a unified platform based on a \"Centralized Database\" (a single source of truth), not a decentralized one."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 11",question:"On-premise ERP operates via the internet and is characterized by high flexibility and speed.",correct:"False",reason:"Operating via the internet with high flexibility is the definition of \"Cloud ERP\". \"On-premise ERP\" is installed internally within the company, has high initial costs, and requires dedicated IT support."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 12",question:"Cloud ERP requires high initial costs, including purchasing licenses and hardware.",correct:"False",reason:"Cloud ERP is known for low initial costs because it provides resources over the internet without heavy infrastructure investment. High initial costs are characteristic of \"On-Premise ERP\"."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 13",question:"SAP systems are suitable for organizations seeking flexibility and rapid digital transformation through the cloud.",correct:"False",reason:"Flexibility and rapid, cloud-first digital transformation are the hallmarks of \"Oracle ERP\". \"SAP ERP\" is enterprise-grade, designed for deep integration and centralized control, and typically has a longer implementation time."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 14",question:"Oracle ERP is the best when the priority is centralized control and strict compliance with procedures.",correct:"False",reason:"When the priority is centralized control and deep enterprise-grade integration, \"SAP ERP\" is the best choice. Oracle ERP is favored for its modern flexibility, scalability, and fast implementation."},
+{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 15",question:"The digital transformation process in operations begins with choosing between cloud and on-premise solutions.",correct:"False",reason:"The first step in the implementation process is to \"Assess Readiness\" (analyze current processes and identify gaps). Choosing the model (Cloud vs. On-Premise) is the third step."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 16",question:"The process of converting information from a physical form to a digital form refers to:",options:[{label:"a",text:"Digitization"},{label:"b",text:"Digitalization"},{label:"c",text:"Digital Transformation"},{label:"d",text:"None of the above"}],correct:"a",explanation:"Digitization is simply changing the format from physical to digital (e.g., scanning a paper invoice into a PDF file). It does not change the actual business process."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 17",question:"Dimensions of digital transformation include:",options:[{label:"a",text:"Customer experience"},{label:"b",text:"Operational processes"},{label:"c",text:"Business models"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Digital technology reshapes an organization across three key dimensions: improving Customer Experience, redesigning Operational Processes, and developing entirely new Business Models."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 18",question:"Providing flexible and scalable IT resources for storing data and running applications over the internet refers to:",options:[{label:"a",text:"Cloud Computing"},{label:"b",text:"Artificial Intelligence"},{label:"c",text:"Internet of Things"},{label:"d",text:"Big Data Analytics"}],correct:"a",explanation:"Cloud Computing enables on-demand access to computing resources over the internet, providing scalability and cost-efficiency without the need for heavy physical infrastructure."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 19",question:"Connecting devices and equipment to the internet to collect real-time data and exchange information refers to:",options:[{label:"a",text:"Cloud Computing"},{label:"b",text:"Artificial Intelligence"},{label:"c",text:"Internet of Things"},{label:"d",text:"Big Data Analytics"}],correct:"c",explanation:"The Internet of Things (IoT) connects physical devices (like factory machines or sensors) to the internet, enabling real-time data collection, monitoring, and remote control."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 20",question:"The third stage of digital transformation is:",options:[{label:"a",text:"Digital Awareness"},{label:"b",text:"Digital Integration"},{label:"c",text:"Digital Experimentation"},{label:"d",text:"Full Transformation"}],correct:"b",explanation:"The stages in order are: 1. Digital Awareness, 2. Digital Experimentation, 3. Digital Integration (where technologies are scaled and integrated across departments), and 4. Full Digital Transformation."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 21",question:"Operational and strategic benefits of ERP include:",options:[{label:"a",text:"Improving operational efficiency"},{label:"b",text:"Reducing errors and duplication"},{label:"c",text:"Supporting digital transformation"},{label:"d",text:"All of the above"}],correct:"d",explanation:"ERP systems provide a single source of data, which eliminates duplication, reduces errors, improves operational efficiency, and serves as the backbone for continuous digital transformation."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 22",question:"A system that combines on-premise and cloud servers is:",options:[{label:"a",text:"On-Premise ERP"},{label:"b",text:"Cloud ERP"},{label:"c",text:"Hybrid ERP"},{label:"d",text:"None of the above"}],correct:"c",explanation:"Hybrid ERP combines both cloud and on-premise components, allowing complex organizations to balance data security with operational flexibility."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 23",question:"SAP systems are most suitable for:",options:[{label:"a",text:"Very large organizations"},{label:"b",text:"Medium organizations"},{label:"c",text:"Small organizations"},{label:"d",text:"All of the above"}],correct:"a",explanation:"SAP ERP is an enterprise-grade solution providing deep system integration and centralized control, making it extremely powerful and highly suitable for very large, complex enterprises."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 24",question:"Oracle ERP is characterized by:",options:[{label:"a",text:"Focus on cloud solutions"},{label:"b",text:"Suitable for rapidly growing organizations"},{label:"c",text:"Reduces the need for complex internal infrastructure"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Oracle ERP is a modern, cloud-first solution designed for high flexibility and fast implementation, making it perfect for rapidly growing businesses that want to avoid heavy internal infrastructure."},
+{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 25",question:"The first step in digital transformation in operations is:",options:[{label:"a",text:"Defining requirements"},{label:"b",text:"Assessing readiness"},{label:"c",text:"Change management"},{label:"d",text:"Selecting the model"}],correct:"b",explanation:"The four sequential steps for successful implementation are: 1. Assess Readiness, 2. Define Requirements, 3. Select the Model, and 4. Change Management."},
 
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 1",
-        context: tableContext,
-        question: "The critical path for the project shown in the figure is:",
-        options: [
-          { label: "a", text: "A-D-F-G-H" },
-          { label: "b", text: "A-B-F-G-H" },
-          { label: "c", text: "A-C-F-G-H" }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 2",
-        context: tableContext,
-        question: "The early start time for activity C is .......... units of time.",
-        options: [
-          { label: "a", text: "30" },
-          { label: "b", text: "5" },
-          { label: "c", text: "10" },
-          { label: "d", text: "17" }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 3",
-        context: tableContext,
-        question: "The late finish time for activity D is .......... units of time.",
-        options: [
-          { label: "a", text: "30" },
-          { label: "b", text: "20" },
-          { label: "c", text: "10" },
-          { label: "d", text: "12" }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 4",
-        context: tableContext,
-        question: "The project completion time is ..........",
-        options: [
-          { label: "a", text: "200" },
-          { label: "b", text: "235" },
-          { label: "c", text: "170" },
-          { label: "d", text: "35" }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 5",
-        context: tableContext,
-        question: "The relationship between the two tasks (A&B) is ..........",
-        options: [
-          { label: "a", text: "FF" },
-          { label: "b", text: "FS" },
-          { label: "c", text: "SF" },
-          { label: "d", text: "SS" }
-        ],
-        correct: "a"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 6",
-        context: tableContext,
-        question: ".......... is reaching a specific point in time and does not require a beginning or end date.",
-        options: [
-          { label: "a", text: "Activity" },
-          { label: "b", text: "Event" },
-          { label: "c", text: "Project" },
-          { label: "d", text: "Other" }
-        ],
-        correct: "b"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 7",
-        context: tableContext,
-        question: ".......... is calculated by determining the difference between a late start and an early start.",
-        options: [
-          { label: "a", text: "Time elasticity" },
-          { label: "b", text: "Variance" },
-          { label: "c", text: "Standard deviation" }
-        ],
-        correct: "a"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 8",
-        context: tableContext,
-        question: "The optimal standard deviation is ..........",
-        options: [
-          { label: "a", text: "10" },
-          { label: "b", text: "1" },
-          { label: "c", text: "0" },
-          { label: "d", text: "100" }
-        ],
-        correct: "c"
-      },
-      {
-        type: "mcq",
-        section: "Multiple Choice Questions",
-        number: "Table Question 9",
-        context: tableContext,
-        question: "What is the standard deviation if the variance for critical activities is 4?",
-        options: [
-          { label: "a", text: "16" },
-          { label: "b", text: "4" },
-          { label: "c", text: "2" },
-          { label: "d", text: "8" }
-        ],
-        correct: "c"
-      },
+// ══════════════════════════════════════
+// Ch.6: Digital Marketing — True/False
+// ══════════════════════════════════════
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 1",question:"Digital marketing communication channels include websites, social media, television, and newspapers.",correct:"False",reason:"Television and newspapers are traditional marketing channels. Digital marketing channels include websites, social media, email, and mobile apps."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 2",question:"Communication in traditional marketing is two-way, unlike digital marketing.",correct:"False",reason:"Communication in traditional marketing is strictly one-way. It is digital marketing that features two-way, interactive communication."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 3",question:"Digital marketing allows a precise audience targeting high costs.",correct:"False",reason:"Digital marketing allows for precise audience targeting with cost-effective (lower) costs. Traditional marketing is the one associated with broad targeting and higher costs."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 4",question:"Performance measurement in digital marketing is accurate and real-time.",correct:"True"},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 5",question:"Traditional marketing campaigns allow real-time measurement of results.",correct:"False",reason:"Traditional marketing offers limited and difficult-to-measure ROI. Real-time and accurate measurement is a key feature of digital marketing."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 6",question:"Search Engine Marketing (SEM) campaigns are paid, unlike Search Engine Optimization (SEO), which is considered free.",correct:"True"},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 7",question:"Social media marketing relies on the Pay-Per-Click (PPC) model.",correct:"False",reason:"It is Search Engine Marketing (SEM), such as Google Ads, that relies heavily on the Pay-Per-Click (PPC) model."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 8",question:"Social media marketing reaches customers with purchase intent, unlike search engine marketing.",correct:"False",reason:"Search Engine Marketing (SEM) is primarily what reaches customers with direct purchase intent based on their specific search queries, whereas social media marketing is more focused on building brand awareness and engagement."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 9",question:"On-page SEO includes reviews and external links (backlinks).",correct:"False",reason:"Reviews, ratings, and external links (backlinks) are elements of Off-Page SEO. On-Page SEO focuses on elements within the website itself, such as titles, keywords, and meta tags."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 10",question:"Macro influencers have between 10,000 and 100,000 followers.",correct:"False",reason:"Influencers with 10,000 to 100,000 followers are classified as \"Micro Influencers\". \"Macro Influencers\" have between 100,000 and 1,000,000 followers."},
+{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 11",question:"Credibility dimensions of influencers include trustworthiness and attractiveness.",correct:"True"},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 12",question:"One of the characteristics of digital marketing:",options:[{label:"a",text:"One-way communication"},{label:"b",text:"Difficulty measuring performance"},{label:"c",text:"Precise and flexible targeting"},{label:"d",text:"All of the above"}],correct:"c",explanation:"Digital marketing is characterized by precise and flexible targeting, two-way interactive communication, and real-time accurate measurement. Options A and B are characteristics of traditional marketing."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 13",question:"Digital marketing channels include:",options:[{label:"a",text:"Search Engine Marketing"},{label:"b",text:"Search Engine Optimization"},{label:"c",text:"Content Marketing"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The seven main channels of digital marketing include SEM, SEO, Content Marketing, Social Media Marketing, Email Marketing, Mobile Marketing, and Influencer Marketing."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 14",question:"Ads in social media marketing may appear through:",options:[{label:"a",text:"Search engines"},{label:"b",text:"Gmail and YouTube"},{label:"c",text:"Google Display Network"},{label:"d",text:"None of the above"}],correct:"d",explanation:"Search engines, Gmail, YouTube, and the Google Display Network are platforms used for Search Engine Marketing (SEM). Social media marketing relies on platforms like Facebook, Instagram, and LinkedIn."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 15",question:"Objectives of search engine marketing include:",options:[{label:"a",text:"Sales"},{label:"b",text:"Increasing awareness"},{label:"c",text:"Website traffic"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The main objectives of paid Search Engine Marketing (SEM) campaigns include driving sales, generating leads, increasing website traffic, promoting apps, and building brand awareness."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 16",question:"Off-page SEO factors include:",options:[{label:"a",text:"Website speed"},{label:"b",text:"Website structure"},{label:"c",text:"Reviews and backlinks"},{label:"d",text:"All of the above"}],correct:"c",explanation:"Reviews and external links (backlinks) are the main factors in Off-Page SEO. Website speed and structure are part of Technical SEO."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 17",question:"Elements of effective content writing include:",options:[{label:"a",text:"Using storytelling"},{label:"b",text:"Including a call to action"},{label:"c",text:"provide real value"},{label:"d",text:"All of the above"}],correct:"d",explanation:"For content marketing to be effective, it must provide real value, utilize storytelling, and always include a clear call to action for the audience."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 18",question:"mobile marketing channels include:",options:[{label:"a",text:"In App Ads"},{label:"b",text:"Push Notifications"},{label:"c",text:"Contextual Trageting"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Mobile marketing leverages multiple channels including In-App Advertisements, Push Notifications, SMS texts, and Contextual Targeting to reach users directly on their devices."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 19",question:"Criteria for selecting influencers include:",options:[{label:"a",text:"Trust"},{label:"b",text:"Engagement"},{label:"c",text:"Credibility"},{label:"d",text:"All of the above"}],correct:"d",explanation:"When selecting an influencer, brands must evaluate the trust they have with their followers, their engagement rate, and their overall content credibility."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 20",question:"Micro influencers have followers ranging between:",options:[{label:"a",text:"1,000-10,000"},{label:"b",text:"10,000-100,000"},{label:"c",text:"100,000-1,000,000"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Micro influencers are classified as having 10K to 100K followers. Nano is 1K-10K, Macro is 100K-1M, and Mega is 1M+."},
+{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 21",question:"Dimensions of influencer credibility include:",options:[{label:"a",text:"Attractiveness"},{label:"b",text:"Expertise"},{label:"c",text:"Similarity"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The primary dimensions that build an influencer's credibility are their expertise, trustworthiness, attractiveness, and their similarity or match-up with the brand's target audience."}
+];
 
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 1",
-        question: "What is the primary purpose of using a PERT (Programme Evaluation and Review Technique) chart in project management?",
-        options: [
-          { label: "a", text: "To calculate the exact financial cost of each individual task within a project." },
-          { label: "b", text: "To assign human resources and personnel to specific project milestones." },
-          { label: "c", text: "To replace the need for identifying task dependencies in simple projects." },
-          { label: "d", text: "To plan and manage large and complex projects by illustrating task sequences and dependencies." }
-        ],
-        correct: "d",
-        explanation: "PERT is specifically designed to handle the complexities of large-scale projects by mapping out the relationships between tasks."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 2",
-        question: "In the context of time estimation, how is 'Probable time' (M) defined?",
-        options: [
-          { label: "a", text: "The absolute minimum time required to complete a task if everything goes perfectly." },
-          { label: "b", text: "The best estimate of how long a task takes, assuming no problems arise." },
-          { label: "c", text: "The average of the optimistic and pessimistic time estimates." },
-          { label: "d", text: "The maximum time required to complete a task, accounting for potential delays." }
-        ],
-        correct: "b",
-        explanation: "The source defines probable time as the most frequent or best estimate of duration under normal conditions."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 3",
-        question: "Which of the following represents the correct formula for calculating the Expected time (E) of a task?",
-        options: [
-          { label: "a", text: "$E = \\frac{O + (6 \\times M) + P}{4}$" },
-          { label: "b", text: "$E = \\frac{O + (4 \\times M) + P}{6}$" },
-          { label: "c", text: "$E = \\frac{O + M + P}{3}$" },
-          { label: "d", text: "$E = \\frac{P - O}{6}$" }
-        ],
-        correct: "b",
-        explanation: "This formula provides a weighted average, giving more importance to the most probable time estimate."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 4",
-        question: "What does a standard deviation ($\\sigma$) of 0 indicate about a project manager's time estimates?",
-        options: [
-          { label: "a", text: "There is a high degree of uncertainty in the project timeline." },
-          { label: "b", text: "The pessimistic time is significantly larger than the optimistic time." },
-          { label: "c", text: "The task will take zero weeks to complete." },
-          { label: "d", text: "The time estimates are considered accurate." }
-        ],
-        correct: "d",
-        explanation: "A standard deviation of zero means there is no distance from the expected value, implying certainty and accuracy in the estimate."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 5",
-        question: "If a task has a pessimistic time (P) of 11 weeks and an optimistic time (O) of 5 weeks, what is the standard deviation ($\\sigma$)?",
-        options: [
-          { label: "a", text: "0.5" },
-          { label: "b", text: "1" },
-          { label: "c", text: "6" },
-          { label: "d", text: "2" }
-        ],
-        correct: "b",
-        explanation: "Using the formula $\\sigma = \\frac{P - O}{6}$, we calculate $\\frac{11 - 5}{6} = 1$."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 6",
-        question: "How is 'Slack time' determined for an activity within a project network?",
-        options: [
-          { label: "a", text: "Target time minus Critical path time." },
-          { label: "b", text: "Expected time minus Optimistic time." },
-          { label: "c", text: "The sum of all standard deviations on the critical path." },
-          { label: "d", text: "Late completion time minus Early completion time." }
-        ],
-        correct: "d",
-        explanation: "Slack represents the amount of time a task can be delayed without affecting the project finish date, calculated as $LS - ES$ or $LF - EF$."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 7",
-        question: "When calculating the variance of the critical path, which method should be used?",
-        options: [
-          { label: "a", text: "Average the slack times of the non-critical activities." },
-          { label: "b", text: "Sum the standard deviations ($\\sigma$) of every activity in the entire project network." },
-          { label: "c", text: "Divide the total project completion time by the number of nodes." },
-          { label: "d", text: "Sum the variances ($\\sigma^2$) of all activities that lie on the critical path." }
-        ],
-        correct: "d",
-        explanation: "The total variance for the project duration is the sum of the individual variances of the tasks that define the project length."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 8",
-        question: "What is represented by the vectors (arrow lines) in a PERT chart?",
-        options: [
-          { label: "a", text: "The milestones and project events." },
-          { label: "b", text: "The tasks or activities that must be performed." },
-          { label: "c", text: "The slack time available for each activity." },
-          { label: "d", text: "The final completion probability of the project." }
-        ],
-        correct: "b",
-        explanation: "In a PERT chart, nodes represent events or milestones, while the arrows connecting them represent the actual work or tasks."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 9",
-        question: "A task has an optimistic time of 2, a most probable time of 4, and a pessimistic time of 12. What is its Expected time (E)?",
-        options: [
-          { label: "a", text: "30" },
-          { label: "b", text: "6" },
-          { label: "c", text: "4" },
-          { label: "d", text: "5" }
-        ],
-        correct: "d",
-        explanation: "Using $E = \\frac{O + 4M + P}{6}$, we get $\\frac{2 + (4 \\times 4) + 12}{6} = \\frac{30}{6} = 5$."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 10",
-        question: "According to the PERT methodology, what is the first step in creating a chart?",
-        options: [
-          { label: "a", text: "Draw nodes representing events and milestones." },
-          { label: "b", text: "Define all the tasks that need to be completed." },
-          { label: "c", text: "Calculate the critical path variance." },
-          { label: "d", text: "Assign a completion time to each task." }
-        ],
-        correct: "b",
-        explanation: "Before dependencies or times can be assigned, the project manager must first identify every individual task in the project."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 11",
-        question: "What does the acronym PERT stand for in the context of project management applications?",
-        options: [
-          { label: "a", text: "Performance Evaluation and Review Task" },
-          { label: "b", text: "Process Efficiency and Reporting Tool" },
-          { label: "c", text: "Project Estimation and Resource Tracking" },
-          { label: "d", text: "Program Evaluation and Review Technique" }
-        ],
-        correct: "d",
-        explanation: "This is the formal name of the method used to analyse the tasks involved in completing a given project, especially the time needed to complete each task."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 12",
-        question: "In a PERT chart, what visual element is used to represent the tasks themselves?",
-        options: [
-          { label: "a", text: "Vectors (arrow lines)" },
-          { label: "b", text: "Dashed boxes" },
-          { label: "c", text: "Grid coordinates" },
-          { label: "d", text: "Nodes (circles)" }
-        ],
-        correct: "a",
-        explanation: "In network diagramming for PERT, arrows or vectors signify the actual work or tasks being performed between events."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 13",
-        question: "Which time estimate assumes the 'best estimate' of how long an activity will take if no problems arise during execution?",
-        options: [
-          { label: "a", text: "Expected time (E)" },
-          { label: "b", text: "Probable time (M)" },
-          { label: "c", text: "Optimistic time (O)" },
-          { label: "d", text: "Pessimistic time (P)" }
-        ],
-        correct: "b",
-        explanation: "Probable time represents the most likely duration for task completion under normal circumstances without unexpected delays."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 14",
-        question: "According to the source material, which formula is used to calculate the Expected Time (E) for a task?",
-        options: [
-          { label: "a", text: "$E = \\frac{O + 6M + P}{4}$" },
-          { label: "b", text: "$E = \\frac{O + M + P}{3}$" },
-          { label: "c", text: "$E = \\frac{O + (4 \\times M) + P}{6}$" },
-          { label: "d", text: "$E = \\frac{P - O}{6}$" }
-        ],
-        correct: "c",
-        explanation: "This formula provides a weighted average that gives more importance to the most probable time estimate."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 15",
-        question: "If the calculated standard deviation ($\\sigma$) for a task's duration is exactly 0, what does this imply?",
-        options: [
-          { label: "a", text: "The degree of uncertainty is at its maximum." },
-          { label: "b", text: "The time estimates are perfectly accurate." },
-          { label: "c", text: "The task is on the critical path." },
-          { label: "d", text: "The task has no dependencies." }
-        ],
-        correct: "b",
-        explanation: "A standard deviation of zero indicates there is no distance from the expected value, meaning there is no uncertainty in the estimate."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 16",
-        question: "How is the 'Slack time' for a project activity determined?",
-        options: [
-          { label: "a", text: "Optimistic time + Pessimistic time" },
-          { label: "b", text: "Expected time + Standard deviation" },
-          { label: "c", text: "Late completion - Early completion" },
-          { label: "d", text: "Target time - Critical path time" }
-        ],
-        correct: "c",
-        explanation: "Slack represents the amount of time a task can be delayed without affecting the overall project finish date, calculated as the difference between late and early finish times."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 17",
-        question: "How is the total Variance of the critical path calculated in a PERT network?",
-        options: [
-          { label: "a", text: "By finding the difference between the longest and shortest path durations." },
-          { label: "b", text: "By multiplying the standard deviations of the start and end nodes." },
-          { label: "c", text: "By taking the average standard deviation of all project tasks." },
-          { label: "d", text: "By summing the variances ($\\sigma^2$) of all activities on the critical path." }
-        ],
-        correct: "d",
-        explanation: "The variance of the total path is the sum of the individual variances of the activities that comprise that specific path."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 18",
-        question: "When defining the order in which tasks should be performed, what is the project manager identifying?",
-        options: [
-          { label: "a", text: "Standard deviations" },
-          { label: "b", text: "Pessimistic estimates" },
-          { label: "c", text: "Dependencies" },
-          { label: "d", text: "Expected values" }
-        ],
-        correct: "c",
-        explanation: "Dependencies define the logical relationships and required sequence between different tasks in a project."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 19",
-        question: "Which component is necessary to calculate the probability of project completion by a specific target time?",
-        options: [
-          { label: "a", text: "The difference between the target time and the critical path time." },
-          { label: "b", text: "The average slack time of non-critical activities." },
-          { label: "c", text: "The number of nodes in the PERT chart." },
-          { label: "d", text: "The sum of all optimistic times in the network." }
-        ],
-        correct: "a",
-        explanation: "The numerator in the probability (Z-score) calculation is the difference between the desired deadline and the calculated expected duration."
-      },
-      {
-        type: "mcq",
-        section: "PERT Questions",
-        number: "Question 20",
-        question: "What is the formula for the standard deviation ($\\sigma$) of a task in PERT?",
-        options: [
-          { label: "a", text: "$\\sigma = E^2$" },
-          { label: "b", text: "$\\sigma = \\frac{P - O}{6}$" },
-          { label: "c", text: "$\\sigma = \\frac{P - M}{4}$" },
-          { label: "d", text: "$\\sigma = \\frac{P + O}{2}$" }
-        ],
-        correct: "b",
-        explanation: "The standard deviation is calculated by dividing the range between the pessimistic and optimistic times by six."
-      },
+const essays=[
+{num:"1",title:"Stages of E-Business Development",items:["Web Presence: A basic website that provides information only.","E-Commerce: Customers can interact, browse products, and place orders online.","E-Business: Full online transactions with payment systems.","Integration/Transformation: Integration of website operations with ERP, CRM, and Supply Chain systems."]},
+{num:"2",title:"Components of the E-Business Model",items:["Value Proposition: The unique value offered to customers.","Revenue Model: How the business earns money.","Market Opportunity: The potential size and value of the market.","Competitive Environment: Existing competitors in the market.","Market Strategy: The plan to attract customers.","Management Team & Organization: The leadership and structure that run the business."]},
+{num:"3",title:"Types of E-Business Models",items:["B2C (Business-to-Consumer): Businesses sell directly to consumers.","B2B (Business-to-Business): Businesses sell to other businesses.","C2C (Consumer-to-Consumer): Consumers sell to other consumers.","C2B (Consumer-to-Business): Individuals provide products or services to businesses.","G2C/B2G: Transactions involving government and citizens/businesses."]},
+{num:"4",title:"E-Business Strategies",items:["Digital Differentiation: Unique value and customer experience. (Apple)","Digital Cost Leadership: Lower costs through efficiency. (Amazon)","Digital Focus: Targeting a niche market. (LinkedIn)","Platform Strategy: Connecting users and providers. (Uber)","Continuous Innovation: Ongoing product improvement. (Spotify)"]},
+{num:"5",title:"Types of E-Commerce",items:["B2B (Business to Business): Commercial transactions between businesses.","B2C (Business to Consumer): Businesses sell directly to consumers.","C2C (Consumer to Consumer): Individuals sell to other individuals online.","B2G (Business to Government): Businesses provide goods or services to government agencies.","G2C (Government to Consumer): Government agencies provide online services to citizens.","C2B (Consumer to Business): Individuals offer services to businesses."]},
+{num:"6",title:"E-Commerce Infrastructure",items:["Technical Infrastructure (TECH): The hardware and software that support e-commerce operations.","Network & Connectivity (NET): Internet and communication networks that enable data transfer.","Electronic Payment Systems (PAY): Systems that allow secure online payments.","Database Management Systems (DATA): Systems used to store and manage customer and product data.","Security Systems (SEC): Tools and measures that protect data and transactions.","Integration with Operations (INT): Connecting the e-commerce platform with inventory, accounting, and logistics systems."]},
+{num:"7",title:"The Electronic Payment Cycle",items:["Initiate Payment: The customer enters payment details to start the transaction.","Encryption & Request: The payment information is encrypted and sent securely.","Routing: The payment request is routed to the issuing bank.","Authorization: The bank verifies the card and approves or declines the payment.","Fund Hold & Confirmation: The amount is reserved, and the merchant receives confirmation.","Settlement: The funds are transferred to the merchant's account."]},
+{num:"8",title:"Types of E-Retailing Models",items:["Standalone Store: A company sells through its own website or app.","Online Marketplace: A platform that connects many sellers with buyers.","Hybrid Model: Combines selling the company's own products with third-party sellers' products.","Dropshipping: The store accepts orders but does not keep inventory.","Social Commerce: Selling directly through social media platforms."]},
+{num:"9",title:"Types of ERP Systems",items:["On-Premise ERP: Installed on the company's own servers.","Cloud-Based ERP: Hosted on cloud servers and accessed online.","Hybrid ERP: Combination of on-premise and cloud solutions."]},
+{num:"10",title:"Types of Digital Marketing Channels",items:["Social Media Marketing (Facebook, Instagram, LinkedIn)","Search Engine Marketing (SEM)","Search Engine Optimization (SEO)","Content Marketing (Articles, videos, podcasts)","Email Marketing","Mobile Marketing","Influencer Marketing"]}
+];
 
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 1",
-        question: "What is the primary purpose of project scheduling?",
-        options: [
-          { label: "a", text: "To establish the final financial audit of the project" },
-          { label: "b", text: "To convert a project plan into a timeline for execution" },
-          { label: "c", text: "To monitor the impact of inflation on resource procurement" },
-          { label: "d", text: "To identify the human resources required for individual tasks" }
-        ],
-        correct: "b",
-        explanation: "Scheduling is defined as the process of turning a plan into a sequential timeline from start to completion. Identifying resources and monitoring inflation are separate processes related to resource management and budgeting respectively."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 2",
-        question: "Which of the following is NOT listed as one of the three stages of project scheduling?",
-        options: [
-          { label: "a", text: "Procurement" },
-          { label: "b", text: "Control" },
-          { label: "c", text: "Planning" },
-          { label: "d", text: "Activity scheduling" }
-        ],
-        correct: "a",
-        explanation: "The source explicitly lists planning, activity scheduling, and control as the three stages. Procurement is a function of resource management or budgeting rather than a core stage of the scheduling process itself."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 3",
-        question: "In the context of project budgeting, why is it necessary to forecast the impact of inflation?",
-        options: [
-          { label: "a", text: "To ensure the accuracy of the budget when resources are used over time" },
-          { label: "b", text: "To determine the critical path of the project timeline" },
-          { label: "c", text: "To identify which human resources are operational or administrative" },
-          { label: "d", text: "To compare actual performance results with planned objectives" }
-        ],
-        correct: "a",
-        explanation: "Inflation forecasting is one of the five steps to achieve a more accurate budget by accounting for cost changes during the project. Determining the critical path and comparing performance are functions of scheduling and control."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 4",
-        question: "What are the two fundamental types of resources that must be identified for a successful project management plan?",
-        options: [
-          { label: "a", text: "Internal and external stakeholders" },
-          { label: "b", text: "Financial and inflationary resources" },
-          { label: "c", text: "Scheduled and unscheduled activities" },
-          { label: "d", text: "Operational and human resources" }
-        ],
-        correct: "d",
-        explanation: "The material states that determining appropriate operational and human resources is crucial for the management plan. While financial factors and stakeholders are important, they are not categorized as the 'fundamental resources' in this specific section."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 5",
-        question: "How is the 'Control' function defined within the project management process?",
-        options: [
-          { label: "a", text: "Forecasting when resources will be needed for implementation" },
-          { label: "b", text: "Writing detailed reports for the project portfolio" },
-          { label: "c", text: "Examining and comparing actual performance with planned objectives" },
-          { label: "d", text: "Calculating the total duration of tasks on the critical path" }
-        ],
-        correct: "c",
-        explanation: "Control involves monitoring and comparing real-time results against the pre-established project plan. Calculations and forecasting are parts of the scheduling and budgeting phases that occur before or alongside control."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 6",
-        question: "Project control encompasses monitoring three specific aspects. Which of the following is one of those aspects?",
-        options: [
-          { label: "a", text: "Inflation rates" },
-          { label: "b", text: "Stakeholder resumes" },
-          { label: "c", text: "Resource procurement risks" },
-          { label: "d", text: "Project processes" }
-        ],
-        correct: "d",
-        explanation: "The source identifies the monitoring of inputs, processes, and outputs as the core aspects of project control. Monitoring inflation or risks are specific steps within the budgeting process."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 7",
-        question: "When generating a project report, which point helps ensure expenditures remain within the allocated budget?",
-        options: [
-          { label: "a", text: "Project expenses" },
-          { label: "b", text: "The timeline of key milestones" },
-          { label: "c", text: "The project portfolio" },
-          { label: "d", text: "Current status of the project" }
-        ],
-        correct: "a",
-        explanation: "Reporting focuses on expenses specifically to ensure they align with the financial plan. While the portfolio and status reports provide context, the expense section directly addresses the budget constraint."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 8",
-        question: "In MS-Project, what value for 'Total Slack' indicates that an activity is on the critical path?",
-        options: [
-          { label: "a", text: "A negative value" },
-          { label: "b", text: "0 days" },
-          { label: "c", text: "5 days" },
-          { label: "d", text: "1 day" }
-        ],
-        correct: "b",
-        explanation: "Activities on the critical path have no flexibility or 'slack,' meaning any delay in these tasks will delay the entire project. Tasks with 1 or more days of slack are not critical as they have a buffer."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 9",
-        question: "In a project network, if Activity G is listed as having predecessors 'Activity B' and 'Activity C', which activities must be completed before Activity G can begin?",
-        options: [
-          { label: "a", text: "Activity E only" },
-          { label: "b", text: "Activity A only" },
-          { label: "c", text: "Activities B and C" },
-          { label: "d", text: "Activities D, E, and F" }
-        ],
-        correct: "c",
-        explanation: "A task with specific predecessors requires all listed activities to finish before it can begin. Thus, Activity G depends on the completion of both B and C."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 10",
-        question: "If Activity A has a duration of 3 units and Activity B (which follows Activity A) has a duration of 3 units, what is the earliest finish (EF) time for Activity B?",
-        options: [
-          { label: "a", text: "9 units" },
-          { label: "b", text: "3 units" },
-          { label: "c", text: "0 units" },
-          { label: "d", text: "6 units" }
-        ],
-        correct: "d",
-        explanation: "The earliest finish is the earliest start (which is the finish of the predecessor, 3) plus the duration (3). So, 3 + 3 = 6. This calculation follows the forward pass logic."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 11",
-        question: "According to the lecture, what is the primary purpose of project scheduling?",
-        options: [
-          { label: "a", text: "Writing reports for the project stakeholders" },
-          { label: "b", text: "Converting a project plan into a timeline for execution" },
-          { label: "c", text: "Determining the final budget of the project" },
-          { label: "d", text: "Allocating human resources to specific workstations" }
-        ],
-        correct: "b",
-        explanation: "Scheduling is the specific process of taking a plan and mapping out all activities and milestones against a chronological timeline."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 12",
-        question: "Which of the following represents the correct sequence of project scheduling stages?",
-        options: [
-          { label: "a", text: "Input monitoring, Process monitoring, and Output monitoring" },
-          { label: "b", text: "Planning, Activity scheduling, and Control" },
-          { label: "c", text: "Forecasting, Procurement, and Evaluation" },
-          { label: "d", text: "Reporting, Tracking progress, and Budgeting" }
-        ],
-        correct: "b",
-        explanation: "The source material identifies these three specific stages as the core components of the project scheduling process."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 13",
-        question: "In the context of project budgeting, what is the fourth step mentioned for achieving an accurate budget?",
-        options: [
-          { label: "a", text: "Forecasting the cost of resources when they are used" },
-          { label: "b", text: "Forecasting potential risks during resource acquisition" },
-          { label: "c", text: "Forecasting when the resources will be needed" },
-          { label: "d", text: "Forecasting the impact of inflation on resources" }
-        ],
-        correct: "d",
-        explanation: "Inflation is explicitly listed as the fourth factor to forecast when developing a realistic project budget."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 14",
-        question: "Resource management involves identifying which two fundamental types of resources to ensure project success?",
-        options: [
-          { label: "a", text: "Internal and external resources" },
-          { label: "b", text: "Software and hardware resources" },
-          { label: "c", text: "Financial and environmental resources" },
-          { label: "d", text: "Operational and human resources" }
-        ],
-        correct: "d",
-        explanation: "The material states that both operational and human resources are fundamental to developing a detailed project management plan."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 15",
-        question: "Which function is described as the 'final element in the management process' and involves comparing actual performance with planned objectives?",
-        options: [
-          { label: "a", text: "Scheduling" },
-          { label: "b", text: "Reporting" },
-          { label: "c", text: "Forecasting" },
-          { label: "d", text: "Control" }
-        ],
-        correct: "d",
-        explanation: "Control, or tracking progress, is defined as the final management element that uses specific criteria to compare results against plans."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 16",
-        question: "What is indicated by a task having a duration of 0 days in the MS-Project practical examples?",
-        options: [
-          { label: "a", text: "The task has been completed already" },
-          { label: "b", text: "It is a project milestone" },
-          { label: "c", text: "It is a critical task with high priority" },
-          { label: "d", text: "It is an error in the project schedule" }
-        ],
-        correct: "b",
-        explanation: "In MS-Project, activities with zero duration, like a 'Finish' or 'Start' node, are used to represent milestones or completion events."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 17",
-        question: "By calculating the longest path through a project's network diagram (the critical path), a project manager finds a total of 20 time units. What does this number represent?",
-        options: [
-          { label: "a", text: "The project completion time" },
-          { label: "b", text: "The slack time of the project" },
-          { label: "c", text: "The average task duration" },
-          { label: "d", text: "The total number of parallel tasks" }
-        ],
-        correct: "a",
-        explanation: "By calculating the longest path through the network diagram (the critical path), the resulting sum represents the total project completion time."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 18",
-        question: "Which of the following is NOT one of the focuses of a project report as described in the lecture?",
-        options: [
-          { label: "a", text: "The project portfolio and key resource challenges" },
-          { label: "b", text: "The current status of the project" },
-          { label: "c", text: "The marketing strategy for project outputs" },
-          { label: "d", text: "The relationship between timeframe and budget" }
-        ],
-        correct: "c",
-        explanation: "The source material lists current status, project portfolio, timeframe/budget relationship, and expenses, but does not mention marketing strategies."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 19",
-        question: "What does a 'Total Slack' of 0 days signify for a task in MS-Project?",
-        options: [
-          { label: "a", text: "The task is a summary task" },
-          { label: "b", text: "The task has no predecessors" },
-          { label: "c", text: "The task is on the critical path" },
-          { label: "d", text: "The task requires no resources" }
-        ],
-        correct: "c",
-        explanation: "Tasks with zero slack cannot be delayed without delaying the entire project, making them critical activities on the critical path."
-      },
-      {
-        type: "mcq",
-        section: "Project Scheduling Questions",
-        number: "Question 20",
-        question: "If a task in a project schedule has predecessors listed as 'A & C', what does this imply about its start time?",
-        options: [
-          { label: "a", text: "It is the predecessor for both Task A and Task C" },
-          { label: "b", text: "It can only start after both Task A and Task C are completed" },
-          { label: "c", text: "It can start as soon as either Task A or Task C finishes" },
-          { label: "d", text: "It starts simultaneously with Task A and Task C" }
-        ],
-        correct: "b",
-        explanation: "A task with multiple predecessors requires all listed activities to finish before it can begin. Standard dependency logic requires all specified predecessors to be complete."
-      },
-      {
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 11",
-  question: "During a Backward Pass calculation, if an activity is a predecessor to three different subsequent activities, how is its Late Finish (LF) determined?",
-  options: [
-    { label: "a", text: "It is the largest Late Start (LS) of the succeeding activities." },
-    { label: "b", text: "It is the smallest Late Start (LS) of the succeeding activities." },
-    { label: "c", text: "It is the sum of all succeeding Late Starts." },
-    { label: "d", text: "It is set to zero automatically." }
-  ],
-  correct: "b",
-  explanation: "When moving backwards, if paths split, the rule is to take the minimum (smallest) Late Start of the succeeding activities to ensure none of the subsequent tasks are delayed."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 12",
-  question: "Which of the following best describes the fundamental difference between the Critical Path Method (CPM) and the Program Evaluation and Review Technique (PERT)?",
-  options: [
-    { label: "a", text: "CPM is used for construction projects, while PERT is exclusively for software development." },
-    { label: "b", text: "CPM does not utilize network diagrams, whereas PERT relies on them heavily." },
-    { label: "c", text: "CPM uses single, deterministic time estimates, while PERT uses three probabilistic time estimates." },
-    { label: "d", text: "CPM calculates project cost, while PERT calculates project quality." }
-  ],
-  correct: "c",
-  explanation: "CPM assumes time is known with certainty (one estimate), while PERT handles uncertainty by using Optimistic, Probable, and Pessimistic time estimates."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 13",
-  question: "An activity has an optimistic time of 4, a probable time of 7, and a pessimistic time of 16. What is its Expected Time (E) and Variance ($\\sigma^2$)?",
-  options: [
-    { label: "a", text: "E = 8, Variance = 2" },
-    { label: "b", text: "E = 8, Variance = 4" },
-    { label: "c", text: "E = 9, Variance = 2" },
-    { label: "d", text: "E = 7, Variance = 4" }
-  ],
-  correct: "b",
-  explanation: "Expected Time $E = (4 + (4 \\times 7) + 16) / 6 = 48 / 6 = 8$. Standard Deviation $\\sigma = (16 - 4) / 6 = 2$. Variance is the square of standard deviation, so $2^2 = 4$."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 14",
-  question: "In MS-Project, if you want to quickly identify all tasks that will immediately delay the project finish date if they slip, which feature or filter should you use?",
-  options: [
-    { label: "a", text: "The Milestones filter" },
-    { label: "b", text: "The Summary Tasks filter" },
-    { label: "c", text: "The Overallocated Resources filter" },
-    { label: "d", text: "The Critical filter" }
-  ],
-  correct: "d",
-  explanation: "Applying the \"Critical\" filter in MS-Project isolates the tasks on the critical path (tasks with zero Total Slack), highlighting the most time-sensitive activities."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 15",
-  question: "When calculating the probability of completing a project within a specific target time, what does the denominator in the final formula represent?",
-  options: [
-    { label: "a", text: "The total expected time of the project." },
-    { label: "b", text: "The standard deviation of the overall critical path." },
-    { label: "c", text: "The sum of standard deviations of all tasks." },
-    { label: "d", text: "The slack time of the first activity." }
-  ],
-  correct: "b",
-  explanation: "The formula is $Z = (Target Time - Expected Time) / \\text{Standard Deviation}$. The denominator must be the total standard deviation of the critical path (which is the square root of the critical path's total variance)."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 16",
-  question: "If a project manager notices that actual task completions are lagging behind the planned objectives, which management element is primarily being utilized to identify this gap?",
-  options: [
-    { label: "a", text: "Resource forecasting" },
-    { label: "b", text: "Planning" },
-    { label: "c", text: "Tracking progress (Control)" },
-    { label: "d", text: "Scheduling" }
-  ],
-  correct: "c",
-  explanation: "Control (tracking progress) involves examining and comparing actual real-world performance results against the planned objectives set during the scheduling phase."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 17",
-  question: "According to the formula $\\sigma = \\frac{P - O}{6}$, what does a very large difference between the pessimistic and optimistic time estimates indicate?",
-  options: [
-    { label: "a", text: "The task is definitely on the critical path." },
-    { label: "b", text: "A higher degree of accuracy in the project manager's estimates." },
-    { label: "c", text: "A higher degree of uncertainty and risk regarding the task's duration." },
-    { label: "d", text: "The probable time (M) was calculated incorrectly." }
-  ],
-  correct: "c",
-  explanation: "A wider gap between the best-case (O) and worst-case (P) scenarios results in a larger standard deviation, which directly indicates higher uncertainty in the estimation."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 18",
-  question: "Which phase of project scheduling specifically involves converting the initial abstract plan into a clear, chronological timeline for execution?",
-  options: [
-    { label: "a", text: "Activity scheduling" },
-    { label: "b", text: "Budgeting" },
-    { label: "c", text: "Procurement" },
-    { label: "d", text: "Reporting" }
-  ],
-  correct: "a",
-  explanation: "While planning outlines what needs to be done, \"Activity scheduling\" (as a stage of Project Scheduling) is the actual process of mapping those activities onto a timeline, often using Gantt charts."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 19",
-  question: "In project budgeting, predicting the impact of economic changes over time is crucial. Which specific forecasting step addresses this?",
-  options: [
-    { label: "a", text: "Forecasting the cost of resources when they are used." },
-    { label: "b", text: "Forecasting the impact of inflation on resources." },
-    { label: "c", text: "Forecasting the potential risks while acquiring resources." },
-    { label: "d", text: "Forecasting when human resources will be needed." }
-  ],
-  correct: "b",
-  explanation: "Forecasting inflation is the 4th step in project budgeting, ensuring that the budget remains accurate even if the costs of materials or resources rise over the project's lifecycle."
-},
-{
-  type: "mcq",
-  section: "Multiple Choice Questions",
-  number: "Question 20",
-  question: "If you have an activity with a Late Finish (LF) of 20 and a duration of 5, and it has an Early Start (ES) of 12. What is its Slack Time?",
-  options: [
-    { label: "a", text: "8" },
-    { label: "b", text: "0" },
-    { label: "c", text: "3" },
-    { label: "d", text: "5" }
-  ],
-  correct: "c",
-  explanation: "First, find the Late Start (LS): $LS = LF - \\text{Duration} = 20 - 5 = 15$. Then, Slack Time $= LS - ES = 15 - 12 = 3$. (Alternatively, $EF = 12 + 5 = 17$, Slack $= 20 - 17 = 3$)."
+let all=[],filtered=[],ci=0;
+
+function init(){
+all=Q.map((q,i)=>({...q,id:i,answered:false,selected:null,isCorrect:null}));
+const chapters=[...new Set(Q.map(q=>q.section))];
+const sel=document.getElementById("chapterFilter");
+chapters.forEach(ch=>{const o=document.createElement("option");o.value=ch;o.textContent=ch;sel.appendChild(o)});
+filtered=[...all];ci=0;updateStats();render();buildEssays();
 }
-    ];
 
-    let allQuestions = [];
-    let filteredQuestions = [];
-    let currentIndex = 0;
+function buildEssays(){
+const c=document.getElementById("essayQuestionsContainer");
+c.innerHTML=essays.map(e=>`
+<div class="essay-card">
+<span class="essay-q-number">Q${e.num}</span>
+<div class="essay-q-title">${e.title}</div>
+<div class="essay-content">
+${e.items.map(item=>`<div class="essay-item">${item}</div>`).join("")}
+</div>
+</div>
+`).join("");
+}
 
-    function initializeQuiz() {
-      allQuestions = questions.map((question, index) => ({
-        ...question,
-        id: index + 1,
-        answered: false,
-        selected: null,
-        isCorrect: null
-      }));
+function switchMode(m){
+document.getElementById("quizContent").classList.toggle("hidden",m==="essay");
+document.getElementById("essayContent").classList.toggle("hidden",m==="quiz");
+document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
+event.target.classList.add("active");
+if(m==="quiz")document.getElementById("statsSection").classList.remove("hidden");
+else document.getElementById("statsSection").classList.add("hidden");
+}
 
-      filteredQuestions = [...allQuestions];
-      currentIndex = 0;
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function rt(t){return esc(t).replace(/\n/g,"<br>")}
 
-      updateStats();
-      renderQuestion();
-    }
+function render(){
+const c=document.getElementById("questionCard");
+if(!filtered.length){c.innerHTML='<div class="feedback wrong">No questions match your filters.</div>';return}
+if(ci>=filtered.length)ci=filtered.length-1;
+if(ci<0)ci=0;
+const q=filtered[ci];
+const tl=q.type==="tf"?"True / False":"MCQ";
+const bc=q.type==="tf"?"badge-tf":"badge-mcq";
+let ah="";
+if(q.type==="tf"){
+["True","False"].forEach(o=>{
+let cls="answer-btn";
+if(q.answered){if(o===q.correct)cls+=" correct";if(o===q.selected&&o!==q.correct)cls+=" wrong"}
+ah+=`<button class="${cls}" onclick="answer('${o}')" ${q.answered?"disabled":""}>${o}</button>`;
+});
+}else{
+q.options.forEach(o=>{
+let cls="answer-btn";
+if(q.answered){if(o.label===q.correct)cls+=" correct";if(o.label===q.selected&&o.label!==q.correct)cls+=" wrong"}
+ah+=`<button class="${cls}" onclick="answer('${o.label}')" ${q.answered?"disabled":""}><strong>${esc(o.label).toUpperCase()})</strong> ${rt(o.text)}</button>`;
+});
+}
+let fb="";
+if(q.answered){
+const ct=q.type==="tf"?q.correct:`${q.correct.toUpperCase()}) ${q.options.find(o=>o.label===q.correct).text}`;
+fb=`<div class="feedback ${q.isCorrect?"correct":"wrong"}">${q.isCorrect?"✅ Correct!":"❌ Wrong."}<div class="detail">Correct Answer: ${rt(ct)}</div>${q.reason?`<div class="detail">Reason: ${rt(q.reason)}</div>`:""}${q.explanation?`<div class="detail">Explanation: ${rt(q.explanation)}</div>`:""}</div>`;
+}
+c.innerHTML=`<div class="q-header"><span class="badge ${bc}">${tl}</span><span class="badge badge-num">${ci+1} / ${filtered.length}</span></div><div class="section-label">${rt(q.section)} — ${rt(q.number)}</div><div class="q-text">${rt(q.question)}</div><div class="answers">${ah}</div>${fb}`;
+updProg();
+}
 
-    function escapeHTML(text) {
-      return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+function answer(s){
+const q=filtered[ci];if(!q||q.answered)return;
+q.answered=true;q.selected=s;q.isCorrect=s===q.correct;
+const o=all.find(x=>x.id===q.id);if(o){o.answered=q.answered;o.selected=q.selected;o.isCorrect=q.isCorrect}
+updateStats();render();
+}
 
-    function renderText(text) {
-      return escapeHTML(text).replace(/\n/g, "<br>");
-    }
+function updateStats(){
+const t=all.length,a=all.filter(q=>q.answered).length,co=all.filter(q=>q.isCorrect).length,p=a?Math.round(co/a*100):0;
+document.getElementById("totalCount").textContent=t;
+document.getElementById("answeredCount").textContent=a;
+document.getElementById("scoreCount").textContent=co;
+document.getElementById("percentCount").textContent=p+"%";
+}
 
-    function renderQuestion() {
-      const container = document.getElementById("questionCard");
+function updProg(){
+const a=all.filter(q=>q.answered).length,t=all.length||1;
+document.getElementById("progressBar").style.width=Math.round(a/t*100)+"%";
+}
 
-      if (filteredQuestions.length === 0) {
-        container.innerHTML = `
-          <div class="feedback wrong">
-            No questions match your current filters.
-          </div>
-        `;
-        return;
-      }
+function next(){if(ci<filtered.length-1){ci++;render()}}
+function prev(){if(ci>0){ci--;render()}}
+function restart(){if(!confirm("Restart quiz and clear all answers?"))return;all.forEach(q=>{q.answered=false;q.selected=null;q.isCorrect=null});ci=0;applyFilters();updateStats();render()}
 
-      if (currentIndex >= filteredQuestions.length) {
-        currentIndex = filteredQuestions.length - 1;
-      }
+function applyFilters(){
+const ch=document.getElementById("chapterFilter").value;
+const tp=document.getElementById("typeFilter").value;
+const st=document.getElementById("statusFilter").value;
+filtered=all.filter(q=>{
+const mc=ch==="all"||q.section===ch;
+const mt=tp==="all"||q.type===tp;
+let ms=true;
+if(st==="unanswered")ms=!q.answered;
+else if(st==="answered")ms=q.answered;
+else if(st==="wrong")ms=q.isCorrect===false;
+return mc&&mt&&ms;
+});
+ci=0;render();
+}
 
-      if (currentIndex < 0) {
-        currentIndex = 0;
-      }
-
-      const q = filteredQuestions[currentIndex];
-      const typeLabel = q.type === "tf" ? "True / False" : "MCQ";
-
-      let answersHTML = "";
-
-      if (q.type === "tf") {
-        const tfOptions = ["True", "False"];
-
-        answersHTML = tfOptions.map(option => {
-          let className = "answer-btn";
-
-          if (q.answered) {
-            if (option === q.correct) className += " correct";
-            if (option === q.selected && option !== q.correct) className += " wrong";
-          }
-
-          return `
-            <button class="${className}" onclick="answerQuestion('${option}')" ${q.answered ? "disabled" : ""}>
-              ${option}
-            </button>
-          `;
-        }).join("");
-      } else {
-        answersHTML = q.options.map(option => {
-          let className = "answer-btn";
-
-          if (q.answered) {
-            if (option.label === q.correct) className += " correct";
-            if (option.label === q.selected && option.label !== q.correct) className += " wrong";
-          }
-
-          return `
-            <button class="${className}" onclick="answerQuestion('${option.label}')" ${q.answered ? "disabled" : ""}>
-              <strong>${escapeHTML(option.label)})</strong> ${renderText(option.text)}
-            </button>
-          `;
-        }).join("");
-      }
-
-      let feedbackHTML = "";
-
-      if (q.answered) {
-        const correctText = q.type === "tf"
-          ? q.correct
-          : `${q.correct}) ${q.options.find(option => option.label === q.correct).text}`;
-
-        feedbackHTML = `
-          <div class="feedback ${q.isCorrect ? "correct" : "wrong"}">
-            ${q.isCorrect ? "Correct!" : "Wrong."}
-            <div class="detail">
-              Correct Answer: ${renderText(correctText)}
-            </div>
-            ${q.reason ? `<div class="detail">Reason: ${renderText(q.reason)}</div>` : ""}
-            ${q.explanation ? `<div class="detail">Explanation: ${renderText(q.explanation)}</div>` : ""}
-          </div>
-        `;
-      }
-
-      container.innerHTML = `
-        <div class="question-top">
-          <span class="badge">${typeLabel}</span>
-          <span class="badge">Question ${currentIndex + 1} of ${filteredQuestions.length}</span>
-        </div>
-
-        <div class="section-title">${renderText(q.section)} - ${renderText(q.number)}</div>
-
-        ${q.context ? `<pre class="context-table">${escapeHTML(q.context)}</pre>` : ""}
-
-        <div class="question-text">
-          ${renderText(q.question)}
-        </div>
-
-        <div class="answers">
-          ${answersHTML}
-        </div>
-
-        ${feedbackHTML}
-      `;
-
-      updateProgress();
-      typesetMath();
-    }
-
-    function answerQuestion(selected) {
-      const q = filteredQuestions[currentIndex];
-
-      if (!q || q.answered) return;
-
-      q.answered = true;
-      q.selected = selected;
-      q.isCorrect = selected === q.correct;
-
-      const original = allQuestions.find(item => item.id === q.id);
-
-      if (original) {
-        original.answered = q.answered;
-        original.selected = q.selected;
-        original.isCorrect = q.isCorrect;
-      }
-
-      updateStats();
-      renderQuestion();
-    }
-
-    function updateStats() {
-      const total = allQuestions.length;
-      const answered = allQuestions.filter(q => q.answered).length;
-      const correct = allQuestions.filter(q => q.isCorrect === true).length;
-      const percent = answered === 0 ? 0 : Math.round((correct / answered) * 100);
-
-      document.getElementById("totalCount").textContent = total;
-      document.getElementById("answeredCount").textContent = answered;
-      document.getElementById("scoreCount").textContent = correct;
-      document.getElementById("percentCount").textContent = percent + "%";
-    }
-
-    function updateProgress() {
-      const answered = allQuestions.filter(q => q.answered).length;
-      const total = allQuestions.length || 1;
-      const percent = Math.round((answered / total) * 100);
-
-      document.getElementById("progressBar").style.width = percent + "%";
-    }
-
-    function nextQuestion() {
-      if (currentIndex < filteredQuestions.length - 1) {
-        currentIndex++;
-        renderQuestion();
-      }
-    }
-
-    function previousQuestion() {
-      if (currentIndex > 0) {
-        currentIndex--;
-        renderQuestion();
-      }
-    }
-
-    function restartQuiz() {
-      if (!confirm("Restart the quiz and clear all answers?")) return;
-
-      allQuestions.forEach(q => {
-        q.answered = false;
-        q.selected = null;
-        q.isCorrect = null;
-      });
-
-      currentIndex = 0;
-      applyFilters();
-      updateStats();
-      renderQuestion();
-    }
-
-    function applyFilters() {
-      const search = "";
-      const type = document.getElementById("typeFilter").value;
-      const status = document.getElementById("statusFilter").value;
-
-      filteredQuestions = allQuestions.filter(q => {
-        const searchableText = [
-          q.section,
-          q.number,
-          q.question,
-          q.context || "",
-          q.reason || "",
-          q.explanation || "",
-          ...(q.options ? q.options.map(option => option.text) : [])
-        ].join(" ").toLowerCase();
-
-        const matchesSearch = searchableText.includes(search);
-        const matchesType = type === "all" || q.type === type;
-
-        let matchesStatus = true;
-
-        if (status === "unanswered") {
-          matchesStatus = !q.answered;
-        } else if (status === "answered") {
-          matchesStatus = q.answered;
-        } else if (status === "wrong") {
-          matchesStatus = q.isCorrect === false;
-        }
-
-        return matchesSearch && matchesType && matchesStatus;
-      });
-
-      currentIndex = 0;
-      renderQuestion();
-    }
-
-    function typesetMath() {
-      if (window.MathJax && window.MathJax.typesetPromise) {
-        window.MathJax.typesetPromise([document.getElementById("questionCard")]).catch(() => {});
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", initializeQuiz);
-  </script>
+document.addEventListener("DOMContentLoaded",init);
+</script>
 </body>
 </html>
