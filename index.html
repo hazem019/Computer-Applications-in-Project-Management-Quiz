@@ -87,6 +87,127 @@ button{border:none;border-radius:12px;padding:12px 20px;cursor:pointer;font-weig
 footer{text-align:center;color:#9ca3af;padding:30px 12px;font-size:13px}
 .hidden{display:none!important}
 
+/* Completion Message Styles */
+.completion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeInOverlay 0.4s ease;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.completion-modal {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+  border: 3px solid #d8b4fe;
+  border-radius: 24px;
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.3);
+  animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.completion-heart {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: heartBeat 0.6s ease;
+  display: inline-block;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.completion-text {
+  font-size: 32px;
+  font-weight: 700;
+  color: #6d28d9;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  font-family: 'Arial', 'Segoe UI', sans-serif;
+}
+
+.completion-subtitle {
+  font-size: 16px;
+  color: #7c3aed;
+  margin-bottom: 32px;
+  font-weight: 600;
+}
+
+.completion-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-restart-comp,
+.btn-back-comp {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.btn-restart-comp {
+  background: linear-gradient(135deg, #7c3aed, #6366f1);
+  color: white;
+}
+
+.btn-restart-comp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+}
+
+.btn-back-comp {
+  background: #e9d5ff;
+  color: #6d28d9;
+}
+
+.btn-back-comp:hover {
+  background: #d8b4fe;
+  transform: translateY(-2px);
+}
+
 /* Essay Questions Styles */
 .essay-container{background:#fff;border-radius:18px;padding:30px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid #e8e8ee}
 .essay-header{text-align:center;margin-bottom:32px;padding-bottom:20px;border-bottom:3px solid #7c3aed}
@@ -381,8 +502,27 @@ if(q.answered){
 const ct=q.type==="tf"?q.correct:`${q.correct.toUpperCase()}) ${q.options.find(o=>o.label===q.correct).text}`;
 fb=`<div class="feedback ${q.isCorrect?"correct":"wrong"}">${q.isCorrect?"✅ Correct!":"❌ Wrong."}<div class="detail">Correct Answer: ${rt(ct)}</div>${q.reason?`<div class="detail">Reason: ${rt(q.reason)}</div>`:""}${q.explanation?`<div class="detail">Explanation: ${rt(q.explanation)}</div>`:""}</div>`;
 }
-c.innerHTML=`<div class="q-header"><span class="badge ${bc}">${tl}</span><span class="badge badge-num">${ci+1} / ${filtered.length}</span></div><div class="section-label">${rt(q.section)} — ${rt(q.number)}</div><div class="q-text">${rt(q.question)}</div><div class="answers">${ah}</div>${fb}`;
+
+const isLastQuestion=ci===filtered.length-1;
+const completionMsg=isLastQuestion&&q.answered?showCompletionMessage():"";
+
+c.innerHTML=`<div class="q-header"><span class="badge ${bc}">${tl}</span><span class="badge badge-num">${ci+1} / ${filtered.length}</span></div><div class="section-label">${rt(q.section)} — ${rt(q.number)}</div><div class="q-text">${rt(q.question)}</div><div class="answers">${ah}</div>${fb}${completionMsg}`;
 updProg();
+}
+function showCompletionMessage(){
+return `
+<div class="completion-overlay" id="completionOverlay">
+<div class="completion-modal">
+<div class="completion-heart">🤍</div>
+<div class="completion-text">ادعيلي دعوه حلوه</div>
+<div class="completion-subtitle"></div>
+<div class="completion-actions">
+<button class="btn-restart-comp" onclick="restartQuiz()">إعادة تشغيل</button>
+<button class="btn-back-comp" onclick="switchMode('essay')">عرض المحتوى التعليمي</button>
+</div>
+</div>
+</div>
+`;
 }
 
 function answer(s){
