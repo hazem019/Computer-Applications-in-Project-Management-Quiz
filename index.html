@@ -3,552 +3,748 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Electronic Business - Final-Review</title>
+<title>Data Analysis — Final Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e}
-header{background:linear-gradient(135deg,#4a1a8a,#7c3aed,#a78bfa);color:#fff;padding:36px 20px;text-align:center;position:relative;overflow:hidden}
-header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.08) 0%,transparent 60%);animation:pulse 8s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-header h1{font-size:30px;margin-bottom:6px;position:relative}
-header p{opacity:.9;font-size:16px;position:relative}
-main{max-width:1050px;margin:28px auto;padding:0 16px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
-.stat{background:#fff;border-radius:16px;padding:18px 12px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.06);border:1px solid #e8e8ee}
-.stat strong{display:block;font-size:26px;color:#7c3aed}
-.stat span{font-size:13px;color:#6b7280}
-.card{background:#fff;border-radius:18px;padding:24px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid #e8e8ee;margin-bottom:20px}
-.mode-selector{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-.mode-btn{padding:12px 24px;border:2px solid #d1d5db;background:#fff;border-radius:12px;cursor:pointer;font-weight:700;font-size:15px;transition:all .3s;color:#1e293b}
-.mode-btn:hover{border-color:#7c3aed;background:#ede9fe;color:#6d28d9}
-.mode-btn.active{background:#7c3aed;color:#fff;border-color:#7c3aed}
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-select{padding:11px 14px;border-radius:12px;border:1px solid #d1d5db;font-size:14px;outline:none;background:#fff;min-width:160px;cursor:pointer;transition:.2s}
-select:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.15)}
-.progress-wrap{height:8px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-bottom:20px}
-.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#a78bfa);border-radius:99px;transition:.4s}
-.q-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
-.badge{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:700}
-.badge-tf{background:#dbeafe;color:#1e40af}
-.badge-mcq{background:#fce7f3;color:#9d174d}
-.badge-num{background:#f3f4f6;color:#374151}
-.section-label{font-size:13px;color:#7c3aed;font-weight:700;margin-bottom:10px;letter-spacing:.3px}
-.q-text{font-size:19px;line-height:1.7;margin-bottom:20px;color:#1e293b}
+
+:root{
+  --bg:#0d0f1a;
+  --surface:#141628;
+  --surface2:#1c1f35;
+  --surface3:#222540;
+  --border:#2a2e50;
+  --accent:#00d4aa;
+  --accent2:#7b6fff;
+  --accent3:#ff6b9d;
+  --text:#e8eaf6;
+  --text-dim:#8890b5;
+  --text-muted:#555d80;
+  --correct:#00c896;
+  --wrong:#ff4d6d;
+  --tf-color:#00b8d9;
+  --mcq-color:#c77dff;
+}
+
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+
+/* ─── Animated background ─── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%,rgba(0,212,170,.07) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%,rgba(123,111,255,.08) 0%,transparent 60%);
+  pointer-events:none;z-index:0
+}
+
+/* ─── Header ─── */
+header{
+  position:relative;z-index:1;
+  padding:52px 24px 44px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(0,212,170,.06) 0%,transparent 100%);
+  overflow:hidden
+}
+header::after{
+  content:'DATA ANALYSIS';
+  position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);
+  font-family:'Syne',sans-serif;font-size:120px;font-weight:800;
+  color:rgba(0,212,170,.03);letter-spacing:12px;white-space:nowrap;
+  pointer-events:none;user-select:none
+}
+.header-badge{
+  display:inline-block;
+  background:rgba(0,212,170,.12);
+  border:1px solid rgba(0,212,170,.3);
+  color:var(--accent);
+  padding:5px 16px;border-radius:99px;
+  font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:16px
+}
+header h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(28px,5vw,48px);
+  font-weight:800;
+  background:linear-gradient(135deg,#e8eaf6 30%,var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1.15;margin-bottom:12px
+}
+header p{color:var(--text-dim);font-size:16px}
+
+/* ─── Layout ─── */
+main{max-width:1060px;margin:0 auto;padding:28px 16px;position:relative;z-index:1}
+
+/* ─── Stats ─── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
+.stat{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;padding:18px 12px;text-align:center;
+  transition:.25s
+}
+.stat:hover{border-color:var(--accent);background:var(--surface2)}
+.stat strong{display:block;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--accent);margin-bottom:2px}
+.stat span{font-size:12px;color:var(--text-dim);font-weight:500;text-transform:uppercase;letter-spacing:.8px}
+
+/* ─── Main Card ─── */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;padding:28px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4)
+}
+
+/* ─── Mode Buttons ─── */
+.mode-selector{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap}
+.mode-btn{
+  padding:11px 22px;
+  border:1px solid var(--border);
+  background:transparent;
+  border-radius:12px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:14px;
+  transition:all .25s;color:var(--text-dim);
+  display:flex;align-items:center;gap:8px
+}
+.mode-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,170,.06)}
+.mode-btn.active{background:rgba(0,212,170,.12);border-color:var(--accent);color:var(--accent)}
+.mode-btn.essay-mode-btn{border-color:rgba(123,111,255,.4);color:var(--accent2)}
+.mode-btn.essay-mode-btn:hover{border-color:var(--accent2);background:rgba(123,111,255,.08)}
+.mode-btn.essay-mode-btn.active{background:rgba(123,111,255,.12);border-color:var(--accent2);color:var(--accent2)}
+
+/* ─── Filters ─── */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+select{
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-family:'DM Sans',sans-serif;font-size:14px;
+  background:var(--surface2);color:var(--text);
+  min-width:150px;cursor:pointer;
+  transition:.2s;outline:none;
+  -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238890b5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  padding-right:32px
+}
+select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,170,.12)}
+select option{background:var(--surface2)}
+
+/* ─── Progress ─── */
+.progress-wrap{height:4px;background:var(--surface3);border-radius:99px;overflow:hidden;margin-bottom:24px}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:.4s}
+
+/* ─── Question Card ─── */
+.q-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.badge{padding:5px 14px;border-radius:99px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+.badge-tf{background:rgba(0,184,217,.15);color:var(--tf-color);border:1px solid rgba(0,184,217,.3)}
+.badge-mcq{background:rgba(199,125,255,.15);color:var(--mcq-color);border:1px solid rgba(199,125,255,.3)}
+.badge-num{background:var(--surface3);color:var(--text-dim);border:1px solid var(--border)}
+.section-label{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:12px;letter-spacing:.5px;text-transform:uppercase}
+.q-text{font-size:18px;line-height:1.75;margin-bottom:22px;color:var(--text);font-weight:400}
+
+/* ─── Answer Buttons ─── */
 .answers{display:grid;gap:10px}
-.answer-btn {
-  text-align: left;
-  background: #ffffff;
-  border: 2px solid #d1d5db;
-  border-radius: 16px;
-  padding: 18px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.6;
-  color: #1e293b;
-  transition: all 0.3s ease;
+.answer-btn{
+  text-align:left;
+  background:var(--surface2);
+  border:1.5px solid var(--border);
+  border-radius:14px;
+  padding:16px 20px;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;font-weight:500;
+  line-height:1.6;color:var(--text);
+  transition:all .25s ease
 }
-
-.answer-btn:hover:not(:disabled) {
-  background: #ede9fe;
-  border-color: #9f7aea;
-  box-shadow: 0 0 0 1px #9f7aea;
+.answer-btn:hover:not(:disabled){
+  background:rgba(0,212,170,.07);
+  border-color:var(--accent);
+  color:var(--text);
+  transform:translateX(4px)
 }
-
-.answer-btn:disabled {
-  cursor: default;
-}
-
-.answer-btn.correct {
-  background: #dcfce7;
-  border-color: #22c55e;
-  color: #14532d;
-}
-
-.answer-btn.wrong {
-  background: #fee2e2;
-  border-color: #ef4444;
-  color: #7f1d1d;
-}
-.answer-btn:hover:not(:disabled){background:#ede9fe;border-color:#9f7aea;box-shadow:0 0 0 1px #9f7aea}
 .answer-btn:disabled{cursor:default}
-.answer-btn.correct{background:#dcfce7;border-color:#22c55e;color:#14532d}
-.answer-btn.wrong{background:#fee2e2;border-color:#ef4444;color:#7f1d1d}
-.feedback{margin-top:18px;border-radius:14px;padding:16px;font-weight:600;line-height:1.65;font-size:15px}
-.feedback.correct{background:#dcfce7;color:#14532d;border:1px solid #86efac}
-.feedback.wrong{background:#fee2e2;color:#7f1d1d;border:1px solid #fca5a5}
-.feedback .detail{margin-top:8px;font-weight:500}
-.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:22px}
-button{border:none;border-radius:12px;padding:12px 20px;cursor:pointer;font-weight:700;font-size:15px;transition:.2s}
-.btn-prev,.btn-restart{background:#e5e7eb;color:#374151}
-.btn-prev:hover,.btn-restart:hover{background:#d1d5db}
-.btn-next{background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff}
-.btn-next:hover{opacity:.9}
-footer{text-align:center;color:#9ca3af;padding:30px 12px;font-size:13px}
+.answer-btn.correct{
+  background:rgba(0,200,150,.12);
+  border-color:var(--correct);
+  color:#a8f0dc
+}
+.answer-btn.wrong{
+  background:rgba(255,77,109,.1);
+  border-color:var(--wrong);
+  color:#ffaab8
+}
+
+/* ─── Feedback ─── */
+.feedback{
+  margin-top:18px;border-radius:14px;
+  padding:16px 18px;font-weight:500;
+  line-height:1.7;font-size:14px;
+  border-left:3px solid
+}
+.feedback.correct{background:rgba(0,200,150,.08);color:#a8f0dc;border-color:var(--correct)}
+.feedback.wrong{background:rgba(255,77,109,.08);color:#ffaab8;border-color:var(--wrong)}
+.feedback .detail{margin-top:8px;opacity:.85}
+
+/* ─── Navigation ─── */
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:24px}
+button{
+  font-family:'DM Sans',sans-serif;
+  border:none;border-radius:12px;
+  padding:12px 22px;cursor:pointer;
+  font-weight:600;font-size:14px;transition:all .2s
+}
+.btn-prev{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border)}
+.btn-prev:hover{border-color:var(--text-dim);color:var(--text)}
+.btn-restart{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border)}
+.btn-restart:hover{border-color:var(--wrong);color:var(--wrong)}
+.btn-next{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#0d0f1a;font-weight:700
+}
+.btn-next:hover{opacity:.88;transform:translateY(-1px)}
+
+/* ─── Completion Overlay ─── */
+.completion-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;animation:fadeInOverlay .4s ease
+}
+@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
+.completion-modal{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;padding:48px 40px;
+  text-align:center;max-width:480px;width:90%;
+  box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(0,212,170,.1);
+  animation:slideUp .5s cubic-bezier(.34,1.56,.64,1)
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.completion-heart{font-size:72px;margin-bottom:20px;display:inline-block;animation:heartBeat .6s ease}
+@keyframes heartBeat{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.completion-text{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--accent);margin-bottom:10px}
+.completion-subtitle{font-size:15px;color:var(--text-dim);margin-bottom:30px}
+.completion-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn-restart-comp,.btn-back-comp{padding:14px 26px;border:none;border-radius:12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;transition:all .3s}
+.btn-restart-comp{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0d0f1a}
+.btn-restart-comp:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,212,170,.3)}
+.btn-back-comp{background:var(--surface2);color:var(--text-dim);border:1px solid var(--border)}
+.btn-back-comp:hover{border-color:var(--accent2);color:var(--accent2)}
+
+/* ─── Essay Section ─── */
+.essay-container{background:transparent}
+.essay-header{text-align:center;margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.essay-header h2{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);margin-bottom:8px}
+.essay-header p{color:var(--text-dim);font-size:15px}
+.essay-back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface2);color:var(--text-dim);
+  padding:10px 18px;border-radius:10px;
+  margin-bottom:24px;cursor:pointer;font-weight:600;font-size:14px;
+  border:1px solid var(--border);
+  transition:.2s
+}
+.essay-back-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+.essay-questions{display:grid;gap:20px}
+.essay-card{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+  transition:.3s
+}
+.essay-card:hover{box-shadow:0 8px 32px rgba(0,212,170,.08);border-color:rgba(0,212,170,.25);transform:translateY(-2px)}
+.essay-q-number{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#0d0f1a;
+  padding:5px 14px;border-radius:20px;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:11px;
+  margin-bottom:12px;letter-spacing:.5px
+}
+.essay-q-title{font-family:'Syne',sans-serif;font-size:18px;color:var(--text);font-weight:700;margin-bottom:16px}
+.essay-content{display:grid;gap:10px}
+.essay-item{
+  background:var(--surface);
+  padding:12px 16px;
+  border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;
+  font-size:14px;line-height:1.7;color:var(--text-dim)
+}
+.essay-item strong{color:var(--accent);display:block;margin-bottom:2px}
+
+footer{text-align:center;color:var(--text-muted);padding:36px 12px;font-size:12px;letter-spacing:.5px;border-top:1px solid var(--border);margin-top:12px}
 .hidden{display:none!important}
 
-/* Completion Message Styles */
-.completion-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeInOverlay 0.4s ease;
-}
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:99px}
+::-webkit-scrollbar-thumb:hover{background:var(--border)}
 
-@keyframes fadeInOverlay {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.completion-modal {
-  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
-  border: 3px solid #d8b4fe;
-  border-radius: 24px;
-  padding: 48px 40px;
-  text-align: center;
-  max-width: 500px;
-  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.3);
-  animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.completion-heart {
-  font-size: 80px;
-  margin-bottom: 20px;
-  animation: heartBeat 0.6s ease;
-  display: inline-block;
-}
-
-@keyframes heartBeat {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.completion-text {
-  font-size: 32px;
-  font-weight: 700;
-  color: #6d28d9;
-  margin-bottom: 12px;
-  letter-spacing: 1px;
-  font-family: 'Arial', 'Segoe UI', sans-serif;
-}
-
-.completion-subtitle {
-  font-size: 16px;
-  color: #7c3aed;
-  margin-bottom: 32px;
-  font-weight: 600;
-}
-
-.completion-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.btn-restart-comp,
-.btn-back-comp {
-  padding: 14px 28px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 15px;
-  transition: all 0.3s ease;
-}
-
-.btn-restart-comp {
-  background: linear-gradient(135deg, #7c3aed, #6366f1);
-  color: white;
-}
-
-.btn-restart-comp:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
-}
-
-.btn-back-comp {
-  background: #e9d5ff;
-  color: #6d28d9;
-}
-
-.btn-back-comp:hover {
-  background: #d8b4fe;
-  transform: translateY(-2px);
-}
-
-/* Essay Questions Styles */
-.essay-container{background:#fff;border-radius:18px;padding:30px;box-shadow:0 8px 30px rgba(0,0,0,.07);border:1px solid #e8e8ee}
-.essay-header{text-align:center;margin-bottom:32px;padding-bottom:20px;border-bottom:3px solid #7c3aed}
-.essay-header h2{font-size:28px;color:#1e293b;margin-bottom:8px}
-.essay-header p{color:#6b7280;font-size:16px}
-.essay-back-btn{display:inline-flex;align-items:center;gap:8px;background:#f3f4f6;color:#374151;padding:10px 16px;border-radius:10px;margin-bottom:20px;cursor:pointer;font-weight:600;transition:.2s}
-.essay-back-btn:hover{background:#e5e7eb;color:#1f2937}
-.essay-questions{display:grid;gap:24px}
-.essay-card{background:linear-gradient(135deg,#f5f3ff 0%,#faf5ff 100%);border:2px solid #e9d5ff;border-radius:16px;padding:24px;transition:.3s}
-.essay-card:hover{box-shadow:0 12px 32px rgba(124,58,237,.15);border-color:#d8b4fe;transform:translateY(-2px)}
-.essay-q-number{display:inline-block;background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;padding:6px 14px;border-radius:20px;font-weight:700;font-size:12px;margin-bottom:12px}
-.essay-q-title{font-size:20px;color:#1e293b;font-weight:700;margin-bottom:16px}
-.essay-content{display:grid;gap:12px}
-.essay-item{background:#fff;padding:14px 16px;border-left:4px solid #7c3aed;border-radius:8px;font-size:15px;line-height:1.7;color:#374151}
-.essay-item strong{color:#1e293b;display:block;margin-bottom:4px}
-footer{text-align:center;color:#9ca3af;padding:30px 12px;font-size:13px}
+/* ─── Keyboard hint ─── */
+.kb-hint{font-size:11px;color:var(--text-muted);text-align:right;margin-top:8px;letter-spacing:.3px}
 </style>
 </head>
 <body>
 <header>
-<h1>Electronic Business - Final Review</h1>
-<p>Test your knowledge &mdash; answer and instantly see the correct answer</p>
+  <div class="header-badge">Final Review</div>
+  <h1>Data Analysis</h1>
+  <p>Interactive quiz — answer and instantly see the correct answer with explanation</p>
 </header>
 <main>
+
 <section class="stats" id="statsSection">
-<div class="stat"><strong id="totalCount">0</strong><span>Total</span></div>
-<div class="stat"><strong id="answeredCount">0</strong><span>Answered</span></div>
-<div class="stat"><strong id="scoreCount">0</strong><span>Correct</span></div>
-<div class="stat"><strong id="percentCount">0%</strong><span>Score</span></div>
+  <div class="stat"><strong id="totalCount">0</strong><span>Total</span></div>
+  <div class="stat"><strong id="answeredCount">0</strong><span>Answered</span></div>
+  <div class="stat"><strong id="scoreCount">0</strong><span>Correct</span></div>
+  <div class="stat"><strong id="percentCount">0%</strong><span>Score</span></div>
 </section>
 
 <section class="card" id="quizSection">
-<div class="mode-selector">
-<button class="mode-btn active" onclick="switchMode('quiz')"> Quiz Questions</button>
-<button class="mode-btn" onclick="switchMode('essay')"> Essay Questions</button>
-</div>
+  <div class="mode-selector">
+    <button class="mode-btn active" onclick="switchMode('quiz')">⬡ Quiz Questions</button>
+    <button class="mode-btn essay-mode-btn" onclick="switchMode('essay')">◈ Key Concepts</button>
+  </div>
 
-<div id="quizContent">
-<div class="filters">
-<select id="chapterFilter" onchange="applyFilters()"><option value="all">All Chapters</option></select>
-<select id="typeFilter" onchange="applyFilters()"><option value="all">All Types</option><option value="tf">True / False</option><option value="mcq">MCQ</option></select>
-<select id="statusFilter" onchange="applyFilters()"><option value="all">All Status</option><option value="unanswered">Unanswered</option><option value="answered">Answered</option><option value="wrong">Wrong Only</option></select>
-</div>
-<div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
-<div id="questionCard"></div>
-<div class="nav">
-<button class="btn-prev" onclick="prev()">◀ Previous</button>
-<button class="btn-restart" onclick="restart()">↻ Restart</button>
-<button class="btn-next" onclick="next()">Next ▶</button>
-</div>
-</div>
+  <div id="quizContent">
+    <div class="filters">
+      <select id="chapterFilter" onchange="applyFilters()"><option value="all">All Sections</option></select>
+      <select id="typeFilter" onchange="applyFilters()"><option value="all">All Types</option><option value="tf">True / False</option><option value="mcq">MCQ</option></select>
+      <select id="statusFilter" onchange="applyFilters()"><option value="all">All Status</option><option value="unanswered">Unanswered</option><option value="answered">Answered</option><option value="wrong">Wrong Only</option></select>
+    </div>
+    <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+    <div id="questionCard"></div>
+    <div class="nav">
+      <button class="btn-prev" onclick="prev()">◀ Previous</button>
+      <button class="btn-restart" onclick="restart()">↻ Restart</button>
+      <button class="btn-next" onclick="next()">Next ▶</button>
+    </div>
+    <div class="kb-hint">Tip: Use ← → arrow keys to navigate</div>
+  </div>
 
-<div id="essayContent" class="hidden">
-<button class="essay-back-btn" onclick="switchMode('quiz')">← Back to Quiz</button>
-<div class="essay-container">
-<div class="essay-header">
-<h2>High-Priority Essay Questions & Key Concepts</h2>
-<p></p>
-</div>
-<div class="essay-questions" id="essayQuestionsContainer"></div>
-</div>
-</div>
+  <div id="essayContent" class="hidden">
+    <button class="essay-back-btn" onclick="switchMode('quiz')">← Back to Quiz</button>
+    <div class="essay-container">
+      <div class="essay-header">
+        <h2>Key Concepts & Reference Material</h2>
+        <p>Core concepts grouped by topic for quick revision</p>
+      </div>
+      <div class="essay-questions" id="essayQuestionsContainer"></div>
+    </div>
+  </div>
 </section>
 </main>
-<footer>E-Commerce &mdash; Interactive Quiz &amp; Learning Platform</footer>
+<footer>Data Analysis &mdash; Interactive Quiz &amp; Learning Platform</footer>
 
 <script>
 const Q=[
-// ═══════════════════════════════════════════
-// Ch.1: E-Business Fundamentals — True/False
-// ═══════════════════════════════════════════
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 1",question:"The digital shift in modern business has led the organization moved from paper-based methods to digital planning, execution and communication.",correct:"True"},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 2",question:"Financial inclusion is considered one of the recent developments associated with digital transformation in the Egyptian business environment.",correct:"True"},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 3",question:"A digital organization is characterized by fragmented electronic systems, non-virtual teams, and more administrative layers.",correct:"False",reason:"A digital organization is characterized by integrated e-systems, virtual teams and remote work, and fewer administrative layers."},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 4",question:"E-business refers to the integrated use of digital technology in buying and selling processes.",correct:"True"},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 5",question:"The concept of e-business includes five strategic pillars: infrastructure- information systems- connectivity - Human capital -innovation culture.",correct:"True"},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 6",question:"In traditional business, work can be performed remotely without spatial or temporal constraints.",correct:"False",reason:"Traditional business requires an on-site physical presence and face-to-face transactions. It is E-business that allows remote work without spatial or temporal constraints, providing 24/7 global reach."},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 7",question:"In e-business, the market scope is global, allowing access to international customers at any time.",correct:"True"},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 8",question:"E-business is characterized by Experience based decision making.",correct:"False",reason:"E-business is characterized by being Data-Driven, using integrated MIS to provide real-time data for precise decision-making. Traditional business is the one characterized by experience-based decision making."},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 9",question:"E-commerce is broader and more comprehensive than e-business.",correct:"False",reason:"E-business is the broader and more comprehensive holistic framework that includes all organizational functions. E-commerce is just a subset of E-business focused mainly on transactional and external activities (buying and selling)."},
-{type:"tf",section:"Ch.1: E-Business Fundamentals",number:"Question 10",question:"The E-business has a cross functional integration where the E-commerce has a partial integration.",correct:"True"},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 11",question:"One of the strategic pillars of e-business is:",options:[{label:"a",text:"infrastructure"},{label:"b",text:"innovation culture"},{label:"c",text:"human capital"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The 5 strategic pillars of e-business are Infrastructure, Information Systems, Connectivity, Human Capital, and Innovation Culture."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 12",question:"E-business is characterized by:",options:[{label:"a",text:"A digital environment"},{label:"b",text:"A limited Reach"},{label:"c",text:"A Rigid structure"},{label:"d",text:"All of the above"}],correct:"a",explanation:"E-business operates in a digital and networked environment. Options B (Limited Reach) and C (Rigid Structure) are characteristics of a traditional physical business."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 13",question:"Traditional business is characterized by:",options:[{label:"a",text:"A physical environment"},{label:"b",text:"Limited reach"},{label:"c",text:"High Overhead"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Traditional business relies on a physical environment, is confined to local/regional markets (limited reach), and incurs high overhead costs due to heavy reliance on physical assets and labor."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 14",question:"The scope of e-business includes:",options:[{label:"a",text:"A hostlic scope covering all internal and external organizational functions"},{label:"b",text:"A scope limited to buying and selling transactions"},{label:"c",text:"A partial scope covering only internal functions"},{label:"d",text:"None of the above"}],correct:"a",explanation:"E-business has a holistic scope that includes all organizational functions (HR, Finance, Production) beyond just transactions, creating value for both internal and external stakeholders."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 15",question:"The first stage in the evolution of e-business is:",options:[{label:"a",text:"Internal IT use"},{label:"b",text:"Internet and communication"},{label:"c",text:"Electronic integration"},{label:"d",text:"Advanced E- Business"}],correct:"a",explanation:"The first development stage of E-business is \"Internal IT Use\", which focuses on operational efficiency like accounting and data storage with limited integration."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 16",question:"The third stage in the evolution of e-business is:",options:[{label:"a",text:"Internal IT use"},{label:"b",text:"Internet and communication"},{label:"c",text:"Electronic integration"},{label:"d",text:"Advanced E- Business"}],correct:"c",explanation:"The third stage is \"Electronic Integration\", where organizations adopt ERP, CRM, and SCM systems to create cross-functional data flow and improve decision-making."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 17",question:"The stage associated with the use of Artificial Intelligence tools in e-business is:",options:[{label:"a",text:"Internal IT use"},{label:"b",text:"Internet and communication"},{label:"c",text:"Electronic integration"},{label:"d",text:"Advanced E- Business"}],correct:"d",explanation:"The fourth stage, \"Advanced E-Business\", is characterized by strategic agility and the use of modern tools like Cloud, Mobile, Big Data, and AI (Artificial Intelligence)."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 18",question:"Tools such as Google Workspace are primarily used for:",options:[{label:"a",text:"Digital marketing"},{label:"b",text:"Customer Relationship Management (CRM)"},{label:"c",text:"Collaboration and teamwork"},{label:"d",text:"Financial Support"}],correct:"c",explanation:"In the modern digital ecosystem, tools like Google Workspace and Microsoft 365 are categorized specifically under \"Collaboration\"."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 19",question:"Tools such as SAP SuccessFactors are primarily used for:",options:[{label:"a",text:"Digital marketing"},{label:"b",text:"Human Resource Management (HRM)"},{label:"c",text:"Digital collaboration and teamwork"},{label:"d",text:"Financial analysis and support"}],correct:"b",explanation:"SAP SuccessFactors and Oracle HCM are specialized tools used for E-HRM (Electronic Human Resource Management) and talent management."},
-{type:"mcq",section:"Ch.1: E-Business Fundamentals",number:"Question 20",question:"Tools such as Meta Ads Manager are primarily used for:",options:[{label:"a",text:"Digital marketing"},{label:"b",text:"Human Resource Management"},{label:"c",text:"Digital collaboration and teamwork"},{label:"d",text:"Financial analysis and support"}],correct:"a",explanation:"Meta Ads, Google Ads, and Analytics are the primary digital ecosystem tools used for Digital Marketing."},
 
-// ═══════════════════════════════════════════════════
-// Ch.2: Digital Value & Business Models — True/False
-// ═══════════════════════════════════════════════════
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 1",question:"Digital value refers to the benefit obtained by the customer or the organization as a result of using digital technologies.",correct:"True"},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 2",question:"The use and analysis of data is considered one of the mechanisms for creating digital value.",correct:"True"},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 3",question:"In the direct online sales model, the organization acts as an intermediary between multiple parties such as sellers and buyers.",correct:"False",reason:"In the direct online sales model, organizations sell directly to customers without intermediaries. It is the \"Platform-Based\" model where the organization acts as a digital intermediary connecting multiple parties."},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 4",question:"In the freemium model, the organization provides free content or services to users and relies on advertising as the primary source of revenue.",correct:"False",reason:"The freemium model offers basic services for free to attract users, while advanced features require payment. Providing free content to users and generating revenue primarily through targeted advertising is the definition of the \"Advertising-Based\" model."},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 5",question:"In the subscription model, the organization provides a digital service or content in exchange for periodic or recurring fees.",correct:"True"},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 6",question:"The digital differentiation strategy relies on using technology and automation to reduce operational costs.",correct:"False",reason:"The strategy that relies on minimizing operational costs through automation to offer competitive pricing is called \"Digital Cost Leadership\". The \"Digital Differentiation\" strategy focuses on delivering distinctive digital value, quality, and superior customer experience regardless of price."},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 7",question:"The platform strategy is based on targeting a specific niche market.",correct:"False",reason:"Targeting a specific niche market with highly tailored digital solutions is the \"Digital Focus\" strategy. The \"Platform Strategy\" relies on orchestrating a digital ecosystem that facilitates interactions between multiple parties."},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 8",question:"The continuous innovation strategy focuses on building a multi-sided digital ecosystem that enables interaction between producers and consumers.",correct:"False",reason:"Building a digital ecosystem to enable interaction is the definition of the \"Platform Strategy\". The \"Continuous Innovation\" strategy prioritizes the ongoing evolution of products and early adoption of emerging tech based on data analysis."},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 9",question:"Focusing on customer experience is considered one of the success factors of e-business.",correct:"True"},
-{type:"tf",section:"Ch.2: Digital Value & Business Models",number:"Question 10",question:"The low digital competition is considered one of the challenges of e-business.",correct:"False",reason:"The challenge is actually \"High Digital Competition\", as low barriers to entry in the digital environment create intense rivalry, requiring strong differentiation to survive."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 11",question:"One of the characteristics of digital value in e-business is:",options:[{label:"a",text:"Data Driven value"},{label:"b",text:"Personalization"},{label:"c",text:"Continuous interaction"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The key characteristics of digital value include being Data-Driven, offering Ubiquitous Access, Personalization, and Continuous Interaction between the organization and customers."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 12",question:"One of the mechanisms for creating digital value is:",options:[{label:"a",text:"Enhance customer experience"},{label:"b",text:"Digital advertising"},{label:"c",text:"Customer loyalty"},{label:"d",text:"All of the above"}],correct:"a",explanation:"According to the e-business framework, the four mechanisms for creating digital value are: 1. Use & Analysis of Data, 2. Deploy Digital Technologies, 3. Enhance Customer Experience, and 4. Achieve Operational Efficiency."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 13",question:"One of the components of the e-business model is:",options:[{label:"a",text:"Value proposition, physical environment, and customer experience"},{label:"b",text:"Digital channels, customer segments, and revenue streams"},{label:"c",text:"Key partners, cost structure, and revenue distribution"},{label:"d",text:"None of the above"}],correct:"b",explanation:"An E-Business Model consists of 9 core components, which include Digital Channels, Customer Segments, and Revenue Streams. (Option A is incorrect because \"physical environment\" belongs to traditional business)."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 14",question:"Uber is an example of:",options:[{label:"a",text:"Direct online sales model"},{label:"b",text:"Platform-based model"},{label:"c",text:"Subscription model"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Uber acts as a digital intermediary connecting drivers with users, generating value via connection without owning the physical vehicles, making it a prime example of the Platform-Based model."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 15",question:"Spotify is an example of:",options:[{label:"a",text:"Subscription model"},{label:"b",text:"Freemium model"},{label:"c",text:"Advertising-based model"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Spotify uses the Freemium model by offering free basic access with limits, while premium subscriptions unlock full features."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 16",question:"Relying on periodic service updates and rapid adoption of emerging technologies reflects:",options:[{label:"a",text:"Platform strategy"},{label:"b",text:"Continuous innovation strategy"},{label:"c",text:"Digital focus strategy"},{label:"d",text:"Digital differentiation strategy"}],correct:"b",explanation:"The Continuous Innovation strategy prioritizes ongoing evolution, data-informed improvement, periodic service updates, and the early adoption of emerging technologies."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 17",question:"Providing unique digital value that makes customers choose the organization based on quality and distinction refers to:",options:[{label:"a",text:"Platform strategy"},{label:"b",text:"Digital focus strategy"},{label:"c",text:"Digital innovation strategy"},{label:"d",text:"None of the above"}],correct:"d",explanation:"The correct term for this strategy is \"Digital Differentiation\". Since it is not listed among the choices (A, B, or C), \"None of the above\" is the strictly correct answer."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 18",question:"One of the success factors of e-business is:",options:[{label:"a",text:"Clear digital value"},{label:"b",text:"Effective technological infrastructure"},{label:"c",text:"Focus on customer experience"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Key success factors for E-Business include delivering Clear Digital Value, building a robust Technological Infrastructure, and focusing heavily on Customer Experience (CX)."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 19",question:"One of the success factors of e-business is:",options:[{label:"a",text:"High digital competition"},{label:"b",text:"Cybersecurity and data protection issues"},{label:"c",text:"Rapid technological change"},{label:"d",text:"None of the above"}],correct:"d",explanation:"Options A, B, and C are all considered major \"Challenges\" or barriers in e-business, not success factors. Therefore, none of the above is correct."},
-{type:"mcq",section:"Ch.2: Digital Value & Business Models",number:"Question 20",question:"One of the challenges of e-business is:",options:[{label:"a",text:"High digital competition"},{label:"b",text:"Building digital trust"},{label:"c",text:"Rapid technological change"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The major challenges facing e-business are High Digital Competition, Cybersecurity, Building Trust, and keeping up with Rapid Technological Change."},
+// ══════════════════════════════════════════════
+// Sec.1: Statistical Data Analysis — True/False (from Doc 1)
+// ══════════════════════════════════════════════
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 1",question:"Statistical data analysis is the process of collecting, organizing, analyzing, and interpreting data.",correct:"True",reason:"Statistical data analysis involves collecting, organizing, analyzing, and interpreting data to extract patterns and valuable information."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 2",question:"The goal of statistical analysis is to extract information that helps in decision-making.",correct:"True",reason:"Extracting valuable information to support decision-making is a primary goal of statistical analysis."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 3",question:"Data in statistics is divided into qualitative data only.",correct:"False",reason:"Data in statistics is divided into two main categories: Qualitative (Categorical) and Quantitative (Numerical)."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 4",question:"Quantitative data is data that can be measured numerically.",correct:"True",reason:"Quantitative data is measured with numbers, and arithmetic operations are meaningful."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 5",question:"Nominal data can be ordered by value.",correct:"False",reason:"Nominal data consists of categories or labels with no inherent order (e.g., gender, country names)."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 6",question:"Ordinal data can be ordered, but the differences between values are not precisely defined.",correct:"True",reason:"Ordinal data involves ordered categories (ranked), but there is no fixed or measurable difference between the ranks."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 7",question:"SPSS combines interval and ratio data under the type \"Scale\".",correct:"True",reason:"In SPSS, both Interval and Ratio levels are merged under the \"Scale\" measurement level."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 8",question:"Interval data has a true zero point.",correct:"False",reason:"Interval data has meaningful differences between values, but it lacks a true (absolute) zero point (e.g., temperature)."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 9",question:"Ratio data has a true zero point.",correct:"True",reason:"Ratio data has meaningful differences and a true absolute zero, meaning all arithmetic operations make sense."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 10",question:"Gender (male/female) is an example of nominal data.",correct:"True",reason:"Gender represents categories with no inherent order, making it nominal data."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 11",question:"Temperature is an example of ratio data.",correct:"False",reason:"Temperature is an example of interval data because it lacks a true absolute zero point (0°C does not mean the absence of temperature)."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 12",question:"Age is an example of ratio data.",correct:"True",reason:"Age has a true zero point and ratios are meaningful, making it ratio data."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 13",question:"All mathematical operations can be performed on nominal data.",correct:"False",reason:"Nominal data is used for classification only. Mathematical operations are only meaningful for quantitative data."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 14",question:"Ordinal data allows comparison such as greater or smaller.",correct:"True",reason:"Since ordinal data involves ranked categories, comparisons regarding order (greater/smaller) are possible."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 15",question:"Pie charts are suitable for nominal data.",correct:"True",reason:"Pie charts are commonly used to show the distribution of nominal data categories."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 16",question:"Histograms are mostly used with quantitative data.",correct:"True",reason:"Histograms are commonly used to display the distribution of Scale (Interval/Ratio) data."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 17",question:"Regression analysis is used with ratio data.",correct:"True",reason:"Regression is a common analysis method for Scale data, which includes both interval and ratio levels."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 18",question:"Nominal data can be analyzed using the Chi-square test.",correct:"True",reason:"The Chi-square test is a standard statistical method for analyzing nominal (categorical) data."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 19",question:"Quantitative data cannot be used for calculations.",correct:"False",reason:"Quantitative data is numerical, meaning arithmetic operations and calculations are highly meaningful."},
+{type:"tf",section:"Sec.1: Statistical Data Analysis",number:"Question 20",question:"SPSS is used for statistical data analysis.",correct:"True",reason:"SPSS is a dedicated software program used for organizing and performing statistical data analysis."},
 
-// ════════════════════════════════
-// Ch.3: E-Commerce — True/False
-// ════════════════════════════════
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 1",question:"E-commerce refers to conducting commercial activities related only to the exchange of goods and services through electronic means.",correct:"False",reason:"E-commerce goes beyond simple online selling; it involves the execution of commercial activities and transactions involving the exchange of goods, services, AND information through electronic means."},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 2",question:"The e-commerce process begins with order processing.",correct:"False",reason:"The e-commerce process begins with the \"Present\" stage (providing product information and specifications through the digital platform). Order processing is the second stage, called the \"Process\" stage."},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 3",question:"Alibaba.com is an example of Business-to-Consumer (B2C) e-commerce.",correct:"False",reason:"Alibaba.com is a global wholesale marketplace, which makes it an example of Business-to-Business (B2B) e-commerce. Amazon is the primary retail example for Business-to-Consumer (B2C)."},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 4",question:"Amazon is an example of Business-to-Consumer (B2C) e-commerce.",correct:"True"},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 5",question:"The Digital Egypt Portal is an example of Business-to-Government (B2G) e-commerce.",correct:"False",reason:"The Digital Egypt Portal provides government services and licenses directly to citizens, making it an example of Government-to-Consumer (G2C) e-commerce."},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 6",question:"One of the advantages of e-commerce is the reduction of operating costs.",correct:"True"},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 7",question:"One of the disadvantages of e-commerce is legal complexity.",correct:"True"},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 8",question:"A payment gateway refers to the technological intermediary between the consumer and the online store.",correct:"False",reason:"A payment gateway serves as the technological intermediary routing authorization requests and encrypting data between the merchant website and the banking system, not between the consumer and the online store."},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 9",question:"According to the electronic payment cycle, the authorization stage comes immediately after encryption.",correct:"False",reason:"According to the electronic payment cycle, the stage that comes immediately after Gateway Encryption & Request is \"Routing\" (the card network routes the authorization request to the issuing bank). Authorization happens after routing."},
-{type:"tf",section:"Ch.3: E-Commerce",number:"Question 10",question:"One of the legal challenges facing e-commerce is the lack of recognition of electronic contracts in some countries.",correct:"True"},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 11",question:"The e-commerce process includes:",options:[{label:"a",text:"Product presentation"},{label:"b",text:"Order processing"},{label:"c",text:"Electronic payment"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The comprehensive e-commerce process flow consists of 5 stages: 1. Present (product presentation), 2. Process (order processing), 3. Pay (electronic payment), 4. Fulfill, and 5. Support. Therefore, all listed options are correct."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 12",question:"When companies provide services directly to individuals, this is considered:",options:[{label:"a",text:"B2B"},{label:"b",text:"B2G"},{label:"c",text:"B2E"},{label:"d",text:"None of the above"}],correct:"d",explanation:"Transactions conducted directly between companies and the final consumer are classified as Business-to-Consumer (B2C). Since B2C is not listed in options A, B, or C, the correct choice is None of the above."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 13",question:"When companies provide services to government entities, this is considered:",options:[{label:"a",text:"B2B"},{label:"b",text:"B2G"},{label:"c",text:"G2B"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Commercial transactions conducted between private companies and government entities for tenders, bids, and public procurement are classified as Business-to-Government (B2G)."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 14",question:"When individuals provide services to companies through platforms such as Upwork, this is considered:",options:[{label:"a",text:"B2B"},{label:"b",text:"B2G"},{label:"c",text:"C2B"},{label:"d",text:"None of the above"}],correct:"c",explanation:"The Consumer-to-Business (C2B) model involves individuals offering value, freelance services, or crowdsourcing to business entities. Upwork is a primary example of this model."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 15",question:"One of the advantages of e-commerce is:",options:[{label:"a",text:"Geographic depth"},{label:"b",text:"Limited working hours"},{label:"c",text:"Speed of execution"},{label:"d",text:"All of the above"}],correct:"c",explanation:"Speed of execution is a major advantage, offering high flexibility to adjust prices and update inventory instantly. Option A is wrong because it provides geographic *expansion* (not depth), and B is wrong because it provides 24/7 availability (not limited hours)."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 16",question:"Components of e-commerce infrastructure include:",options:[{label:"a",text:"Technical infrastructure"},{label:"b",text:"Network and connectivity infrastructure"},{label:"c",text:"Electronic payment systems"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The infrastructure forming the backbone of digital commercial operations consists of 6 components: Technical Infrastructure, Network & Connectivity, Electronic Payment Systems, Database Management Systems, Security Systems, and Operational Integration."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 17",question:"According to the electronic payment cycle, the bank verifies the customer's balance and approves the transaction during the:",options:[{label:"a",text:"Encryption stage"},{label:"b",text:"Routing stage"},{label:"c",text:"Authorization stage"},{label:"d",text:"Fund Hold stage"}],correct:"c",explanation:"During the Authorization stage, the issuing bank verifies the card's validity and available balance, then approves or declines the transaction."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 18",question:"According to the electronic payment cycle, funds are transferred to the merchant's account after the:",options:[{label:"a",text:"Purchase stage"},{label:"b",text:"Authorization stage"},{label:"c",text:"Settlement stage"},{label:"d",text:"Routing stage"}],correct:"c",explanation:"Settlement is the final phase of the electronic payment cycle where funds are actually transferred to the merchant's account after clearing and fee deductions."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 19",question:"One of the legal and regulatory challenges of e-commerce is:",options:[{label:"a",text:"Consumer protection"},{label:"b",text:"Intellectual property"},{label:"c",text:"Privacy and data protection"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Digital compliance and cross-border regulations introduce several challenges, including Consumer Protection, Intellectual Property, Data Privacy (like GDPR), E-Contracts Recognition, and Taxation."},
-{type:"mcq",section:"Ch.3: E-Commerce",number:"Question 20",question:"One of the disadvantages of e-commerce is:",options:[{label:"a",text:"Changing competition"},{label:"b",text:"Legal facilitation"},{label:"c",text:"High return rates"},{label:"d",text:"All of the above"}],correct:"c",explanation:"High return rates are a major operational disadvantage. The inability to try or inspect products beforehand leads to higher return volumes, which significantly increases reverse logistics costs."},
+// ══════════════════════════════════════════════
+// Sec.1: Statistical Data Analysis — MCQ (from Doc 1)
+// ══════════════════════════════════════════════
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 21",question:"Statistical data analysis is:",options:[{label:"a",text:"Collecting data only"},{label:"b",text:"Analyzing and interpreting data"},{label:"c",text:"Writing reports"},{label:"d",text:"Storing data"}],correct:"b",explanation:"It involves collecting, organizing, analyzing, and interpreting data to support decision-making."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 22",question:"Data that represents categories is called:",options:[{label:"a",text:"Quantitative"},{label:"b",text:"Qualitative"},{label:"c",text:"Numerical"},{label:"d",text:"Ratio"}],correct:"b",explanation:"Qualitative data describes categories or labels."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 23",question:"Data that can be measured numerically is called:",options:[{label:"a",text:"Qualitative"},{label:"b",text:"Descriptive"},{label:"c",text:"Quantitative"},{label:"d",text:"Nominal"}],correct:"c",explanation:"Quantitative data is measured with numbers."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 24",question:"Which of the following is an example of nominal data?",options:[{label:"a",text:"Height"},{label:"b",text:"Weight"},{label:"c",text:"Gender"},{label:"d",text:"Age"}],correct:"c",explanation:"Gender is a category with no inherent order."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 25",question:"Data that can be ordered without fixed differences between values is called:",options:[{label:"a",text:"Nominal"},{label:"b",text:"Ordinal"},{label:"c",text:"Categorical"},{label:"d",text:"Ratio"}],correct:"b",explanation:"Ordinal data involves ranked categories where the exact difference between ranks is not fixed."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 26",question:"Which of the following is an example of ordinal data?",options:[{label:"a",text:"Education level"},{label:"b",text:"Weight"},{label:"c",text:"Height"},{label:"d",text:"Age"}],correct:"a",explanation:"Education level has a clear order (e.g., primary, secondary, university), making it ordinal."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 27",question:"Temperature is considered:",options:[{label:"a",text:"Nominal"},{label:"b",text:"Ordinal"},{label:"c",text:"Interval"},{label:"d",text:"Ratio"}],correct:"c",explanation:"Temperature has meaningful differences but lacks a true absolute zero point."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 28",question:"Age is considered:",options:[{label:"a",text:"Nominal"},{label:"b",text:"Ordinal"},{label:"c",text:"Interval"},{label:"d",text:"Ratio"}],correct:"d",explanation:"Age has a true zero and ratios are meaningful."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 29",question:"In SPSS, interval and ratio are combined under:",options:[{label:"a",text:"Nominal"},{label:"b",text:"Ordinal"},{label:"c",text:"Scale"},{label:"d",text:"Category"}],correct:"c",explanation:"SPSS labels both numeric measurement levels (Interval and Ratio) simply as \"Scale\"."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 30",question:"Which of the following has a true zero point?",options:[{label:"a",text:"Time"},{label:"b",text:"Temperature"},{label:"c",text:"Weight"},{label:"d",text:"Ranking"}],correct:"c",explanation:"Weight is a ratio variable with a true zero (0 kg means no weight)."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 31",question:"Nominal data allows:",options:[{label:"a",text:"Addition"},{label:"b",text:"Division"},{label:"c",text:"Counting and frequency"},{label:"d",text:"Multiplication"}],correct:"c",explanation:"Since it is categorical, nominal data is usually summarized using counts and percentages."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 32",question:"Which chart is suitable for nominal data?",options:[{label:"a",text:"Histogram"},{label:"b",text:"Scatter Plot"},{label:"c",text:"Pie Chart"},{label:"d",text:"Line Chart"}],correct:"c",explanation:"A pie chart effectively displays the frequency of nominal categories."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 33",question:"Histogram is mostly used with:",options:[{label:"a",text:"Quantitative data"},{label:"b",text:"Nominal data"},{label:"c",text:"Descriptive data"},{label:"d",text:"Ordinal data"}],correct:"a",explanation:"Histograms display the distribution of continuous, numeric (Scale/Quantitative) data."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 34",question:"Regression analysis is mostly used with:",options:[{label:"a",text:"Nominal data"},{label:"b",text:"Quantitative data"},{label:"c",text:"Ordinal data"},{label:"d",text:"Descriptive data"}],correct:"b",explanation:"Regression models require numeric (Scale/Quantitative) data to calculate relationships."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 35",question:"Ranking positions in a race is an example of:",options:[{label:"a",text:"Nominal data"},{label:"b",text:"Ordinal data"},{label:"c",text:"Ratio data"},{label:"d",text:"Interval data"}],correct:"b",explanation:"Ranks indicate order, but the time difference between the 1st and 2nd runner is not necessarily the same as between the 2nd and 3rd."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 36",question:"Which of the following is an example of ratio data?",options:[{label:"a",text:"Color"},{label:"b",text:"Gender"},{label:"c",text:"Weight"},{label:"d",text:"Satisfaction level"}],correct:"c",explanation:"Weight has a meaningful zero point, making it a ratio measurement."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 37",question:"Chi-square test is mainly used with:",options:[{label:"a",text:"Nominal data"},{label:"b",text:"Interval data"},{label:"c",text:"Ratio data"},{label:"d",text:"Numerical data"}],correct:"a",explanation:"Chi-square is a common test used to analyze the relationship between nominal categorical variables."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 38",question:"The goal of statistical analysis is:",options:[{label:"a",text:"Deleting data"},{label:"b",text:"Making decisions"},{label:"c",text:"Reducing data"},{label:"d",text:"Hiding information"}],correct:"b",explanation:"It turns raw data into evidence to support decision-making."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 39",question:"The difference between interval and ratio data is:",options:[{label:"a",text:"Presence of a true zero"},{label:"b",text:"Type of chart"},{label:"c",text:"Presentation method"},{label:"d",text:"Data size"}],correct:"a",explanation:"Ratio data has an absolute true zero point, while interval data does not."},
+{type:"mcq",section:"Sec.1: Statistical Data Analysis",number:"Question 40",question:"SPSS is used for:",options:[{label:"a",text:"Website design"},{label:"b",text:"Data analysis"},{label:"c",text:"Drawing only"},{label:"d",text:"Writing articles"}],correct:"b",explanation:"SPSS stands for Statistical Package for the Social Sciences, heavily used for data analysis."},
 
-// ═══════════════════════════════
-// Ch.4: E-Retailing — True/False
-// ═══════════════════════════════
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 1",question:"The concept of E-Retailing is broader and more comprehensive than E-Commerce.",correct:"False",reason:"E-Commerce is the broader umbrella that encompasses multiple transaction types (B2B, C2C, G2C) and focuses on the infrastructure. E-Retailing is a specific, narrower concept that focuses only on the end-to-end customer experience for the final consumer."},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 2",question:"The concept of E-Retailing is more closely associated with electronic commerce models such as B2C and B2B.",correct:"False",reason:"The concept of E-Retailing is specifically associated with the B2C (Business-to-Consumer) model only, as it targets the final consumer. It does not target B2B (Business-to-Business)."},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 3",question:"In a standalone online store, the platform allows other sellers to display their products.",correct:"False",reason:"In a Standalone Store, a company owns its website and sells directly to consumers with full operational and brand control. Allowing other sellers to display their products is characteristic of an Online Marketplace or a Hybrid Model."},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 4",question:"In multi-vendor online marketplaces, the platform owns products that it sells directly to the final consumer.",correct:"False",reason:"An Online Marketplace acts as a platform intermediary connecting multiple sellers to buyers without owning physical assets or inventory. Owning the products directly is a characteristic of a Standalone Store."},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 5",question:"In the dropshipping model, the store does not keep physical inventory; instead, when an order is placed, the order details are sent to the supplier who ships the product directly to the customer.",correct:"True"},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 6",question:"Among the success factors of social commerce are visual content and High engagement.",correct:"True"},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 7",question:"It is preferable for companies to shift from an Omnichannel strategy to a Multichannel strategy.",correct:"False",reason:"It is preferable to shift from a Multichannel strategy (which has fragmented channels and disconnected data silos) to an Omnichannel strategy, which is the ultimate strategic goal for providing unified data and a seamless cross-channel customer journey."},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 8",question:"In dynamic pricing, prices are determined based on close monitoring of competitors in order to maintain market share.",correct:"False",reason:"Monitoring and matching competitor prices to protect market share is the definition of \"Competitive Pricing\". \"Dynamic Pricing\" refers to making real-time algorithmic adjustments based on market fluctuations and demand."},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 9",question:"The use of coupons, free shipping, and seasonal promotions refers to psychological pricing.",correct:"False",reason:"The use of coupons, free shipping thresholds, and limited-time offers is defined as \"Promotional Pricing\". \"Psychological Pricing\" leverages behavioral cues like charm pricing (e.g., $19.99) and scarcity cues (e.g., \"Only 2 left\")."},
-{type:"tf",section:"Ch.4: E-Retailing",number:"Question 10",question:"Value-based pricing means setting the price based on the customer's perceived value.",correct:"True"},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 11",question:"One of the characteristics of a standalone online store is:",options:[{label:"a",text:"Rapid expansion in product assortment"},{label:"b",text:"Revenue from commissions and services"},{label:"c",text:"The company fully controls inventory management and brand"},{label:"d",text:"All of the above"}],correct:"c",explanation:"The primary characteristic of a standalone store is that the company owns its website/app and sells directly, allowing for full control over inventory, marketing, and the brand. Options A and B are characteristics of Marketplaces."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 12",question:"One of the characteristics of online marketplaces is:",options:[{label:"a",text:"Rapid expansion in product assortment"},{label:"b",text:"low inventory risk"},{label:"c",text:"dependent on seller"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Online marketplaces connect buyers and sellers, which allows for a high product assortment and low inventory risk. However, the customer experience is highly dependent on the quality of those third-party sellers."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 13",question:"One of the advantages of the dropshipping model is:",options:[{label:"a",text:"No need for large capital investment in inventory"},{label:"b",text:"Difficulty in controlling product quality"},{label:"c",text:"Customer experience depends on the supplier"},{label:"d",text:"None of the above"}],correct:"a",explanation:"Because the store takes orders but holds no stock, the main advantage is zero inventory risk and low capital requirement. Options B and C are disadvantages, not advantages."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 14",question:"One of the disadvantages of the dropshipping model is:",options:[{label:"a",text:"Difficulty in controlling product quality"},{label:"b",text:"Relatively low profit margins"},{label:"c",text:"Customer experience depends on the supplier"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Since suppliers ship directly to the customer, the store has less control over shipping speed and product quality. Additionally, because the store is essentially just an order-taker, it yields relatively low profit margins."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 15",question:"To achieve useability and navigation in the user experience on an e-commerce platform, there should be:",options:[{label:"a",text:"prominent \"add to cart\" actions"},{label:"b",text:"Auto suggest search engine"},{label:"c",text:"Advanced filters and clear categories"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Usability and Navigation (one of the six UX pillars) requires intuitive structures like advanced filtering, clear categories, auto-suggest search engines, and prominent \"Add to Cart\" buttons to reduce user friction."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 16",question:"One of the key factors for increasing the conversion rate and improving the customer experience is:",options:[{label:"a",text:"Personalization"},{label:"b",text:"checkout experience"},{label:"c",text:"post-purchase experience"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The six key pillars that drive conversion and customer loyalty include Personalization, Checkout Experience, and Post-Purchase experience, along with Usability, Speed, and Trust."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 17",question:"To protect market share, companies should follow:",options:[{label:"a",text:"psychological pricing"},{label:"b",text:"Dynamic pricing"},{label:"c",text:"Competitive pricing"},{label:"d",text:"None of the above"}],correct:"c",explanation:"Competitive Pricing relies on monitoring and matching (or slightly undercutting) competitor prices specifically to protect market share in transparent markets."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 18",question:"Using prices such as 9.99 or visually highlighting discounts refers to:",options:[{label:"a",text:"Psychological pricing"},{label:"b",text:"Dynamic pricing"},{label:"c",text:"Competitive pricing"},{label:"d",text:"None of the above"}],correct:"a",explanation:"Psychological Pricing leverages behavioral cues to influence the perception of value, such as using charm pricing (e.g., $19.99) or visually emphasizing discounts and scarcity."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 19",question:"Offering unique prices to specific customer segments based on their behavioral data and history refers to:",options:[{label:"a",text:"Promotional pricing"},{label:"b",text:"Personalized pricing"},{label:"c",text:"Value-based pricing"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Personalized Pricing involves tailoring prices and loyalty-based special offers to individual segments based on their specific behavioral data and history."},
-{type:"mcq",section:"Ch.4: E-Retailing",number:"Question 20",question:"Adjusting prices in real time based on algorithms that analyze market fluctuations refer to:",options:[{label:"a",text:"Value-based pricing"},{label:"b",text:"Dynamic pricing"},{label:"c",text:"Personalized pricing"},{label:"d",text:"All of the above"}],correct:"b",explanation:"Dynamic Pricing utilizes real-time algorithmic adjustments that respond to market fluctuations, seasonality, and demand to maximize revenue."},
+// ══════════════════════════════════════════════
+// Sec.2: Data Collection & Types — True/False (from Doc 1)
+// ══════════════════════════════════════════════
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 41",question:"Primary data is collected for the first time for a specific purpose.",correct:"True",reason:"Primary data is collected directly from the source specifically to solve the current problem."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 42",question:"Secondary data is always collected by the researcher himself.",correct:"False",reason:"Secondary data is data that was previously collected by someone else for another purpose and is reused later."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 43",question:"Secondary data is less expensive than primary data.",correct:"True",reason:"Because secondary data already exists, it usually costs less in time and effort to acquire."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 44",question:"Primary data is usually more accurate than secondary data.",correct:"True",reason:"Primary data offers stronger relevance and control over data quality because it is tailored to the specific research objective."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 45",question:"Government reports are a source of secondary data.",correct:"True",reason:"Reports previously published by governments or organizations are standard secondary data sources."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 46",question:"Questionnaires are a method of collecting primary data.",correct:"True",reason:"Surveys and structured questionnaires are core collection tools for gathering primary data directly from respondents."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 47",question:"Interviews are used to obtain detailed data.",correct:"True",reason:"Interviews collect deeper, richer data through direct conversation with participants."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 48",question:"Observation depends on monitoring individuals' behavior.",correct:"True",reason:"Observation relies on recording behaviors or events directly in real-world settings."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 49",question:"Document analysis depends on reviewing books and reports.",correct:"True",reason:"It involves examining existing texts, reports, archives, and official sources for evidence."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 50",question:"Structured data is organized in tables.",correct:"True",reason:"Structured data is highly organized in formats like tables and databases, making it suitable for SPSS."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 51",question:"Unstructured data includes text, images, and videos.",correct:"True",reason:"Unstructured data is less organized and is typically text-rich or media-based."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 52",question:"Unstructured data does not require advanced tools for analysis.",correct:"False",reason:"Unstructured data (like text, images, and video) often needs advanced methods, including AI-based tools, for proper analysis."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 53",question:"Questionnaires contain only one type of question.",correct:"False",reason:"Questionnaires can utilize several question formats, including closed-ended, open-ended, multiple-choice, and rating scales."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 54",question:"Open-ended questions allow participants to answer freely.",correct:"True",reason:"Open-ended formats allow respondents to add richer qualitative detail without fixed options."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 55",question:"Closed-ended questions have predefined answers.",correct:"True",reason:"They provide fixed response options that are easy to compare and analyze statistically."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 56",question:"Multiple-choice questions provide several answer options.",correct:"True",reason:"They offer several predefined options for a single question."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 57",question:"Interviews can be structured or unstructured.",correct:"True",reason:"Interviews can be structured (fixed questions), semi-structured, or unstructured (open-ended conversations)."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 58",question:"Secondary data is more expensive than primary data.",correct:"False",reason:"Secondary data is usually lower in cost because it already exists, whereas primary data collection requires significant time and effort."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 59",question:"Structured data can be analyzed using SPSS.",correct:"True",reason:"Numeric records and coded questionnaire responses in structured formats are perfectly suited for statistical software like SPSS."},
+{type:"tf",section:"Sec.2: Data Collection & Types",number:"Question 60",question:"Document analysis is used in historical and social research.",correct:"True",reason:"Examining texts, archives, and official records is a widely used method in historical and social studies."},
 
-// ═══════════════════════════════════════════
-// Ch.5: Digital Transformation — True/False
-// ═══════════════════════════════════════════
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 1",question:"The concept of digital transformation is limited to using digital technologies in operations without the need to redesign them.",correct:"False",reason:"Digital transformation is not simply about adopting new technologies; it requires a fundamental rethinking and redesigning of how businesses operate, their business models, and how they deliver value to customers."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 2",question:"Digitization means using digital technology and automating processes to improve efficiency within the organization.",correct:"False",reason:"Using digital technology and data to improve and automate existing business processes is the definition of \"Digitalization\". \"Digitization\" is only the process of converting information from physical formats into digital forms."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 3",question:"Digitalization refers to converting information from a physical form into a digital form.",correct:"False",reason:"Converting information from a physical form to a digital form (like scanning a paper to PDF) is called \"Digitization\". \"Digitalization\" involves automating and improving processes."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 4",question:"Digital transformation means completely redesigning the business model and creating new value using technology.",correct:"True"},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 5",question:"Technologies supporting digital transformation include cloud computing, big data analytics, artificial intelligence, and the Internet of Things.",correct:"True"},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 6",question:"The first stage of digital transformation is digital experimentation.",correct:"False",reason:"The first stage is \"Digital Awareness\", where leadership recognizes the strategic importance of digital technologies. \"Digital Experimentation\" is the second stage."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 7",question:"One of the challenges facing digital transformation in organizations is increasing digital skills and cybersecurity.",correct:"False",reason:"The actual challenges are the \"Lack of Digital Skills\" (shortage of talent) and the high \"Cybersecurity Risks\", not the increase of skills and security."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 8",question:"Using digital recruitment platforms and AI for screening is a form of digital transformation in marketing management.",correct:"False",reason:"Using digital recruitment platforms, AI screening, and e-learning are forms of digital transformation in Human Resource Management (HRM), not Marketing Management."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 9",question:"Digital transformation in operations management is not limited to introducing technology but also includes changing organizational culture and how daily tasks are executed.",correct:"True"},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 10",question:"ERP systems manage materials and core operations within an organization through multiple platforms and a decentralized database.",correct:"False",reason:"ERP systems connect various business functions into a single, cohesive system through a unified platform based on a \"Centralized Database\" (a single source of truth), not a decentralized one."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 11",question:"On-premise ERP operates via the internet and is characterized by high flexibility and speed.",correct:"False",reason:"Operating via the internet with high flexibility is the definition of \"Cloud ERP\". \"On-premise ERP\" is installed internally within the company, has high initial costs, and requires dedicated IT support."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 12",question:"Cloud ERP requires high initial costs, including purchasing licenses and hardware.",correct:"False",reason:"Cloud ERP is known for low initial costs because it provides resources over the internet without heavy infrastructure investment. High initial costs are characteristic of \"On-Premise ERP\"."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 13",question:"SAP systems are suitable for organizations seeking flexibility and rapid digital transformation through the cloud.",correct:"False",reason:"Flexibility and rapid, cloud-first digital transformation are the hallmarks of \"Oracle ERP\". \"SAP ERP\" is enterprise-grade, designed for deep integration and centralized control, and typically has a longer implementation time."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 14",question:"Oracle ERP is the best when the priority is centralized control and strict compliance with procedures.",correct:"False",reason:"When the priority is centralized control and deep enterprise-grade integration, \"SAP ERP\" is the best choice. Oracle ERP is favored for its modern flexibility, scalability, and fast implementation."},
-{type:"tf",section:"Ch.5: Digital Transformation",number:"Question 15",question:"The digital transformation process in operations begins with choosing between cloud and on-premise solutions.",correct:"False",reason:"The first step in the implementation process is to \"Assess Readiness\" (analyze current processes and identify gaps). Choosing the model (Cloud vs. On-Premise) is the third step."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 16",question:"The process of converting information from a physical form to a digital form refers to:",options:[{label:"a",text:"Digitization"},{label:"b",text:"Digitalization"},{label:"c",text:"Digital Transformation"},{label:"d",text:"None of the above"}],correct:"a",explanation:"Digitization is simply changing the format from physical to digital (e.g., scanning a paper invoice into a PDF file). It does not change the actual business process."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 17",question:"Dimensions of digital transformation include:",options:[{label:"a",text:"Customer experience"},{label:"b",text:"Operational processes"},{label:"c",text:"Business models"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Digital technology reshapes an organization across three key dimensions: improving Customer Experience, redesigning Operational Processes, and developing entirely new Business Models."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 18",question:"Providing flexible and scalable IT resources for storing data and running applications over the internet refers to:",options:[{label:"a",text:"Cloud Computing"},{label:"b",text:"Artificial Intelligence"},{label:"c",text:"Internet of Things"},{label:"d",text:"Big Data Analytics"}],correct:"a",explanation:"Cloud Computing enables on-demand access to computing resources over the internet, providing scalability and cost-efficiency without the need for heavy physical infrastructure."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 19",question:"Connecting devices and equipment to the internet to collect real-time data and exchange information refers to:",options:[{label:"a",text:"Cloud Computing"},{label:"b",text:"Artificial Intelligence"},{label:"c",text:"Internet of Things"},{label:"d",text:"Big Data Analytics"}],correct:"c",explanation:"The Internet of Things (IoT) connects physical devices (like factory machines or sensors) to the internet, enabling real-time data collection, monitoring, and remote control."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 20",question:"The third stage of digital transformation is:",options:[{label:"a",text:"Digital Awareness"},{label:"b",text:"Digital Integration"},{label:"c",text:"Digital Experimentation"},{label:"d",text:"Full Transformation"}],correct:"b",explanation:"The stages in order are: 1. Digital Awareness, 2. Digital Experimentation, 3. Digital Integration (where technologies are scaled and integrated across departments), and 4. Full Digital Transformation."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 21",question:"Operational and strategic benefits of ERP include:",options:[{label:"a",text:"Improving operational efficiency"},{label:"b",text:"Reducing errors and duplication"},{label:"c",text:"Supporting digital transformation"},{label:"d",text:"All of the above"}],correct:"d",explanation:"ERP systems provide a single source of data, which eliminates duplication, reduces errors, improves operational efficiency, and serves as the backbone for continuous digital transformation."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 22",question:"A system that combines on-premise and cloud servers is:",options:[{label:"a",text:"On-Premise ERP"},{label:"b",text:"Cloud ERP"},{label:"c",text:"Hybrid ERP"},{label:"d",text:"None of the above"}],correct:"c",explanation:"Hybrid ERP combines both cloud and on-premise components, allowing complex organizations to balance data security with operational flexibility."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 23",question:"SAP systems are most suitable for:",options:[{label:"a",text:"Very large organizations"},{label:"b",text:"Medium organizations"},{label:"c",text:"Small organizations"},{label:"d",text:"All of the above"}],correct:"a",explanation:"SAP ERP is an enterprise-grade solution providing deep system integration and centralized control, making it extremely powerful and highly suitable for very large, complex enterprises."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 24",question:"Oracle ERP is characterized by:",options:[{label:"a",text:"Focus on cloud solutions"},{label:"b",text:"Suitable for rapidly growing organizations"},{label:"c",text:"Reduces the need for complex internal infrastructure"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Oracle ERP is a modern, cloud-first solution designed for high flexibility and fast implementation, making it perfect for rapidly growing businesses that want to avoid heavy internal infrastructure."},
-{type:"mcq",section:"Ch.5: Digital Transformation",number:"Question 25",question:"The first step in digital transformation in operations is:",options:[{label:"a",text:"Defining requirements"},{label:"b",text:"Assessing readiness"},{label:"c",text:"Change management"},{label:"d",text:"Selecting the model"}],correct:"b",explanation:"The four sequential steps for successful implementation are: 1. Assess Readiness, 2. Define Requirements, 3. Select the Model, and 4. Change Management."},
+// ══════════════════════════════════════════════
+// Sec.2: Data Collection & Types — MCQ (from Doc 1)
+// ══════════════════════════════════════════════
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 61",question:"Data collected for the first time is called:",options:[{label:"a",text:"Secondary data"},{label:"b",text:"Primary data"},{label:"c",text:"Structured data"},{label:"d",text:"Unstructured data"}],correct:"b",explanation:"Primary data is collected directly from the source for a specific new purpose."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 62",question:"An example of secondary data source:",options:[{label:"a",text:"Questionnaire"},{label:"b",text:"Interview"},{label:"c",text:"Government reports"},{label:"d",text:"Experiment"}],correct:"c",explanation:"Reports are existing documents created previously, making them secondary data."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 63",question:"Primary data is usually:",options:[{label:"a",text:"Less accurate"},{label:"b",text:"Less expensive"},{label:"c",text:"More accurate"},{label:"d",text:"Old"}],correct:"c",explanation:"It provides strong control over fit and data quality since it is designed specifically for the research objective."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 64",question:"Which of the following is a method of collecting primary data?",options:[{label:"a",text:"Books"},{label:"b",text:"Questionnaires"},{label:"c",text:"Articles"},{label:"d",text:"Reports"}],correct:"b",explanation:"Questionnaires gather new data directly from participants."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 65",question:"Interviews are used to:",options:[{label:"a",text:"Collect detailed data"},{label:"b",text:"Reduce data"},{label:"c",text:"Delete information"},{label:"d",text:"Classify data"}],correct:"a",explanation:"They provide deeper, nuanced, and richer data through direct conversations."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 66",question:"Observing individuals' behavior is called:",options:[{label:"a",text:"Questionnaire"},{label:"b",text:"Interview"},{label:"c",text:"Observation"},{label:"d",text:"Experiment"}],correct:"c",explanation:"Observation relies on watching people or events directly in real-world settings."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 67",question:"Analyzing books and reports is called:",options:[{label:"a",text:"Document analysis"},{label:"b",text:"Observation"},{label:"c",text:"Interviews"},{label:"d",text:"Questionnaire"}],correct:"a",explanation:"Document analysis involves examining texts, official records, books, and journals."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 68",question:"Data organized in tables is called:",options:[{label:"a",text:"Unstructured"},{label:"b",text:"Structured"},{label:"c",text:"Descriptive"},{label:"d",text:"Textual"}],correct:"b",explanation:"Structured data format is organized in tables and databases."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 69",question:"Text and images are considered:",options:[{label:"a",text:"Structured data"},{label:"b",text:"Unstructured data"},{label:"c",text:"Numerical data"},{label:"d",text:"Ratio data"}],correct:"b",explanation:"Media and text-rich files lack a fixed table organization, making them unstructured."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 70",question:"Which type of question allows free response?",options:[{label:"a",text:"Closed"},{label:"b",text:"Open-ended"},{label:"c",text:"Optional"},{label:"d",text:"Ordinal"}],correct:"b",explanation:"Open-ended questions allow respondents to answer freely and provide deeper context."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 71",question:"Questions with fixed answers are called:",options:[{label:"a",text:"Open"},{label:"b",text:"Closed"},{label:"c",text:"Analytical"},{label:"d",text:"Descriptive"}],correct:"b",explanation:"Closed-ended questions provide fixed response options."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 72",question:"Questions with several options are called:",options:[{label:"a",text:"Multiple choice"},{label:"b",text:"Open-ended"},{label:"c",text:"Descriptive"},{label:"d",text:"Analytical"}],correct:"a",explanation:"Multiple-choice formats offer predefined options to choose from."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 73",question:"Rating scale is used for:",options:[{label:"a",text:"Measuring satisfaction or evaluation"},{label:"b",text:"Calculating mean"},{label:"c",text:"Data analysis"},{label:"d",text:"Deleting data"}],correct:"a",explanation:"Rating scales measure the intensity of agreement or satisfaction (e.g., 1 to 5 scale)."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 74",question:"Secondary data is often used when:",options:[{label:"a",text:"Very accurate data is needed"},{label:"b",text:"Quick and low-cost data is needed"},{label:"c",text:"Experiments are needed"},{label:"d",text:"Interviews are needed"}],correct:"b",explanation:"It is best when time, cost, or quick benchmarking matters most."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 75",question:"Interviews can be:",options:[{label:"a",text:"Structured only"},{label:"b",text:"Unstructured only"},{label:"c",text:"Structured, semi-structured, and unstructured"},{label:"d",text:"Written only"}],correct:"c",explanation:"Interviews vary in flexibility, ranging from strictly planned sequences to open-ended conversations."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 76",question:"Primary data requires:",options:[{label:"a",text:"Time and effort"},{label:"b",text:"No effort"},{label:"c",text:"No time"},{label:"d",text:"Free"}],correct:"a",explanation:"Gathering primary data usually entails a high cost in terms of time and effort."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 77",question:"Social media analysis mainly relies on:",options:[{label:"a",text:"Structured data"},{label:"b",text:"Unstructured data"},{label:"c",text:"Nominal data"},{label:"d",text:"Ordinal data"}],correct:"b",explanation:"Social media is heavily text and media-based, which falls under unstructured data."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 78",question:"Structured data is usually:",options:[{label:"a",text:"Images"},{label:"b",text:"Videos"},{label:"c",text:"Tables"},{label:"d",text:"Texts"}],correct:"c",explanation:"Structured data formats are neatly organized into tables and databases for easy analysis."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 79",question:"Methods of data collection include:",options:[{label:"a",text:"Questionnaire"},{label:"b",text:"Interview"},{label:"c",text:"Observation"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Core data collection methods include surveys (questionnaires), interviews, observation, and document analysis."},
+{type:"mcq",section:"Sec.2: Data Collection & Types",number:"Question 80",question:"The purpose of primary data is:",options:[{label:"a",text:"Solving a specific problem"},{label:"b",text:"General information"},{label:"c",text:"Reducing data"},{label:"d",text:"Deleting data"}],correct:"a",explanation:"Primary data is collected directly for the current study to solve a specific problem or support a specific decision."},
 
-// ══════════════════════════════════════
-// Ch.6: Digital Marketing — True/False
-// ══════════════════════════════════════
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 1",question:"Digital marketing communication channels include websites, social media, television, and newspapers.",correct:"False",reason:"Television and newspapers are traditional marketing channels. Digital marketing channels include websites, social media, email, and mobile apps."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 2",question:"Communication in traditional marketing is two-way, unlike digital marketing.",correct:"False",reason:"Communication in traditional marketing is strictly one-way. It is digital marketing that features two-way, interactive communication."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 3",question:"Digital marketing allows a precise audience targeting high costs.",correct:"False",reason:"Digital marketing allows for precise audience targeting with cost-effective (lower) costs. Traditional marketing is the one associated with broad targeting and higher costs."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 4",question:"Performance measurement in digital marketing is accurate and real-time.",correct:"True"},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 5",question:"Traditional marketing campaigns allow real-time measurement of results.",correct:"False",reason:"Traditional marketing offers limited and difficult-to-measure ROI. Real-time and accurate measurement is a key feature of digital marketing."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 6",question:"Search Engine Marketing (SEM) campaigns are paid, unlike Search Engine Optimization (SEO), which is considered free.",correct:"True"},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 7",question:"Social media marketing relies on the Pay-Per-Click (PPC) model.",correct:"False",reason:"It is Search Engine Marketing (SEM), such as Google Ads, that relies heavily on the Pay-Per-Click (PPC) model."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 8",question:"Social media marketing reaches customers with purchase intent, unlike search engine marketing.",correct:"False",reason:"Search Engine Marketing (SEM) is primarily what reaches customers with direct purchase intent based on their specific search queries, whereas social media marketing is more focused on building brand awareness and engagement."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 9",question:"On-page SEO includes reviews and external links (backlinks).",correct:"False",reason:"Reviews, ratings, and external links (backlinks) are elements of Off-Page SEO. On-Page SEO focuses on elements within the website itself, such as titles, keywords, and meta tags."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 10",question:"Macro influencers have between 10,000 and 100,000 followers.",correct:"False",reason:"Influencers with 10,000 to 100,000 followers are classified as \"Micro Influencers\". \"Macro Influencers\" have between 100,000 and 1,000,000 followers."},
-{type:"tf",section:"Ch.6: Digital Marketing",number:"Question 11",question:"Credibility dimensions of influencers include trustworthiness and attractiveness.",correct:"True"},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 12",question:"One of the characteristics of digital marketing:",options:[{label:"a",text:"One-way communication"},{label:"b",text:"Difficulty measuring performance"},{label:"c",text:"Precise and flexible targeting"},{label:"d",text:"All of the above"}],correct:"c",explanation:"Digital marketing is characterized by precise and flexible targeting, two-way interactive communication, and real-time accurate measurement. Options A and B are characteristics of traditional marketing."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 13",question:"Digital marketing channels include:",options:[{label:"a",text:"Search Engine Marketing"},{label:"b",text:"Search Engine Optimization"},{label:"c",text:"Content Marketing"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The seven main channels of digital marketing include SEM, SEO, Content Marketing, Social Media Marketing, Email Marketing, Mobile Marketing, and Influencer Marketing."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 14",question:"Ads in social media marketing may appear through:",options:[{label:"a",text:"Search engines"},{label:"b",text:"Gmail and YouTube"},{label:"c",text:"Google Display Network"},{label:"d",text:"None of the above"}],correct:"d",explanation:"Search engines, Gmail, YouTube, and the Google Display Network are platforms used for Search Engine Marketing (SEM). Social media marketing relies on platforms like Facebook, Instagram, and LinkedIn."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 15",question:"Objectives of search engine marketing include:",options:[{label:"a",text:"Sales"},{label:"b",text:"Increasing awareness"},{label:"c",text:"Website traffic"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The main objectives of paid Search Engine Marketing (SEM) campaigns include driving sales, generating leads, increasing website traffic, promoting apps, and building brand awareness."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 16",question:"Off-page SEO factors include:",options:[{label:"a",text:"Website speed"},{label:"b",text:"Website structure"},{label:"c",text:"Reviews and backlinks"},{label:"d",text:"All of the above"}],correct:"c",explanation:"Reviews and external links (backlinks) are the main factors in Off-Page SEO. Website speed and structure are part of Technical SEO."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 17",question:"Elements of effective content writing include:",options:[{label:"a",text:"Using storytelling"},{label:"b",text:"Including a call to action"},{label:"c",text:"provide real value"},{label:"d",text:"All of the above"}],correct:"d",explanation:"For content marketing to be effective, it must provide real value, utilize storytelling, and always include a clear call to action for the audience."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 18",question:"mobile marketing channels include:",options:[{label:"a",text:"In App Ads"},{label:"b",text:"Push Notifications"},{label:"c",text:"Contextual Trageting"},{label:"d",text:"All of the above"}],correct:"d",explanation:"Mobile marketing leverages multiple channels including In-App Advertisements, Push Notifications, SMS texts, and Contextual Targeting to reach users directly on their devices."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 19",question:"Criteria for selecting influencers include:",options:[{label:"a",text:"Trust"},{label:"b",text:"Engagement"},{label:"c",text:"Credibility"},{label:"d",text:"All of the above"}],correct:"d",explanation:"When selecting an influencer, brands must evaluate the trust they have with their followers, their engagement rate, and their overall content credibility."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 20",question:"Micro influencers have followers ranging between:",options:[{label:"a",text:"1,000-10,000"},{label:"b",text:"10,000-100,000"},{label:"c",text:"100,000-1,000,000"},{label:"d",text:"None of the above"}],correct:"b",explanation:"Micro influencers are classified as having 10K to 100K followers. Nano is 1K-10K, Macro is 100K-1M, and Mega is 1M+."},
-{type:"mcq",section:"Ch.6: Digital Marketing",number:"Question 21",question:"Dimensions of influencer credibility include:",options:[{label:"a",text:"Attractiveness"},{label:"b",text:"Expertise"},{label:"c",text:"Similarity"},{label:"d",text:"All of the above"}],correct:"d",explanation:"The primary dimensions that build an influencer's credibility are their expertise, trustworthiness, attractiveness, and their similarity or match-up with the brand's target audience."}
+// ══════════════════════════════════════════════
+// Sec.3: SPSS & Data Entry — True/False (from Doc 2)
+// ══════════════════════════════════════════════
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 1",question:"Statistical data analysis includes collecting, organizing, analyzing, and interpreting data.",correct:"True",reason:"Statistical data analysis is the comprehensive process of collecting, organizing, analyzing, and interpreting data to extract valuable information."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 2",question:"The goal of statistical analysis is decision making.",correct:"True",reason:"The primary objective of statistical analysis is to extract patterns and evidence that support informed decision-making."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 3",question:"Data consists of qualitative data only.",correct:"False",reason:"Data in statistics is divided into two main categories: Qualitative (Categorical) and Quantitative (Numerical)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 4",question:"Quantitative data can be measured using numbers.",correct:"True",reason:"Quantitative data is numerical, meaning it can be measured and arithmetic operations on it are meaningful."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 5",question:"Nominal data can be ordered.",correct:"False",reason:"Nominal data consists of unordered categories used for classification only (e.g., gender, colors)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 6",question:"Ordinal data can be arranged in order.",correct:"True",reason:"Ordinal data involves ordered or ranked categories, though the exact difference between the ranks is not fixed."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 7",question:"Ratio data has an absolute zero.",correct:"True",reason:"Ratio data has meaningful differences and a true (absolute) zero point, meaning all arithmetic operations make sense."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 8",question:"Temperature is an example of interval data.",correct:"True",reason:"Temperature is interval data because it has meaningful differences between values but lacks a true absolute zero (0°C doesn't mean no temperature)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 9",question:"Age is an example of ratio data.",correct:"True",reason:"Age has a true zero point, making ratios meaningful (e.g., 20 years is twice as old as 10 years)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 10",question:"Nominal data allows arithmetic operations like addition.",correct:"False",reason:"Nominal data is categorical and used only for classification. Arithmetic operations like addition are only meaningful for quantitative data."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 11",question:"Histogram is used with quantitative data.",correct:"True",reason:"Histograms are specifically designed to show the distribution of continuous quantitative (Scale) data."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 12",question:"Pie Chart is used with nominal data.",correct:"True",reason:"Pie charts are an excellent choice for displaying the distribution and percentages of nominal categories."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 13",question:"SPSS is used for statistical data analysis.",correct:"True",reason:"SPSS (Statistical Package for the Social Sciences) is a specialized software program used for data formatting and statistical analysis."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 14",question:"Columns in Data View represent cases.",correct:"False",reason:"In the SPSS Data View, columns represent Variables, while rows represent Cases (individual records)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 15",question:"Rows in SPSS represent cases.",correct:"True",reason:"Each row in the SPSS Data View corresponds to a single case or observation in the dataset."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 16",question:"Variables are defined in Variable View.",correct:"True",reason:"Variable View is the specific screen in SPSS where you define variable properties like Name, Type, and Measure."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 17",question:"Frequencies are used with categorical data.",correct:"True",reason:"Frequency analysis is the standard method for summarizing qualitative (categorical) data like Nominal and Ordinal variables."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 18",question:"Descriptive statistics are used with numerical data.",correct:"True",reason:"Descriptive statistics (like Mean and Standard Deviation) are calculated using quantitative (numerical) data."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 19",question:"Standard deviation indicates dispersion.",correct:"True",reason:"Standard deviation measures how much the data values deviate or disperse around the mean."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 20",question:"The mean appears in Descriptive statistics.",correct:"True",reason:"The mean (average) is a core measurement extracted when running Descriptive Statistics in SPSS."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 21",question:"Missing values mean empty data.",correct:"True",reason:"Missing data occurs when values are not entered, leaving empty cells or unavailable records in the dataset."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 22",question:"Outliers are values close to other values.",correct:"False",reason:"Outliers are values that deviate significantly and suspiciously from the rest of the dataset."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 23",question:"Duplication means repeating the same record.",correct:"True",reason:"Duplicate records occur when the exact same observation is entered more than once, which distorts sample size."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 24",question:"Boxplot is used to detect outliers.",correct:"True",reason:"A visual Boxplot is a common and effective method to identify outliers in a dataset."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 25",question:"Deleting outliers is always the best solution.",correct:"False",reason:"Outliers shouldn't always be deleted; they can be kept if they reflect genuine data, removed if they are entry errors, or replaced."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 26",question:"Missing values can be replaced by the mean.",correct:"True",reason:"One valid method for handling missing data is \"Mean Substitution,\" where empty cells are replaced with the variable's average."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 27",question:"Outliers may affect results.",correct:"True",reason:"The presence of outliers can heavily distort statistical analysis and lead to incorrect conclusions."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 28",question:"Label Encoding converts categories into numbers.",correct:"True",reason:"Label Encoding involves converting ordered categories (like grades A, B, C) into numeric values (like 4, 3, 2)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 29",question:"One-Hot Encoding converts one category into multiple columns.",correct:"True",reason:"One-Hot Encoding converts categorical data into multiple binary variables (1s and 0s)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 30",question:"Standardization means deleting data.",correct:"False",reason:"Standardization means unifying inconsistent data values into a consistent format (e.g., standardizing date formats or units)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 31",question:"Correlation measures the relationship between two variables.",correct:"True",reason:"Correlation analysis identifies and measures the strength and direction of the relationship between different variables."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 32",question:"Regression is used for prediction.",correct:"True",reason:"Regression analysis uses historical data to build a predictive model for future values."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 33",question:"Pearson is used with numerical data.",correct:"True",reason:"The Pearson Coefficient is used to measure linear relationships between numerical variables that follow a normal distribution."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 34",question:"Spearman is used with non-linear data.",correct:"True",reason:"The Spearman Coefficient is used with ranked (ordinal) data or when the relationship is non-linear."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 35",question:"Chi-Square is used with categorical data.",correct:"True",reason:"The Chi-Square test analyzes whether a statistically significant relationship exists between different categorical variables (Nominal)."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 36",question:"ANOVA is used to compare several means.",correct:"True",reason:"Analysis of Variance (ANOVA) is used to compare the means across several different groups or categories."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 37",question:"Time Series is used for time-based data.",correct:"True",reason:"Time Series analysis collects time-stamped data to analyze trends, seasonal patterns, and forecast future trends."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 38",question:"Histogram is used to show data distribution.",correct:"True",reason:"A Histogram is a visual chart used to display the distribution of values within a quantitative dataset."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 39",question:"Boxplot is used to display dispersion.",correct:"True",reason:"A Boxplot allows researchers to visually observe the central tendency, spread (dispersion), and potential outliers in the data."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 40",question:"Factor Analysis is used to reduce variables.",correct:"True",reason:"Factor Analysis (Dimensionality Reduction) simplifies data representation by reducing a large set of variables into a smaller set of key components."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 41",question:"Missing values can always be ignored.",correct:"False",reason:"Missing data must be actively identified and handled (via deletion or imputation) because ignoring it directly affects the reliability of statistical results."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 42",question:"Remove Duplicates is used to delete repeated records.",correct:"True",reason:"Deleting exact duplicates ensures that only one instance of each unique case remains, preventing sample size inflation."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 43",question:"Correlation = 0 means no relationship.",correct:"True",reason:"A correlation coefficient of exactly 0 indicates that there is no correlation between the variables."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 44",question:"Correlation = +1 means strong positive relationship.",correct:"True",reason:"A correlation coefficient of +1 indicates a perfect positive linear relationship."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 45",question:"Correlation = -1 means strong negative relationship.",correct:"True",reason:"A correlation coefficient of -1 indicates a perfect negative linear relationship."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 46",question:"Cleaning data is an important step before analysis.",correct:"True",reason:"The \"Garbage In, Garbage Out\" rule dictates that data must be cleaned (handling missing data, outliers, errors) before any reliable analysis can begin."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 47",question:"Standardizing data format is part of data cleaning.",correct:"True",reason:"Filling missing values, converting to consistent formats, and removing gaps are core steps in standardizing and cleaning data."},
+{type:"tf",section:"Sec.3: SPSS & Data Cleaning",number:"Question 48",question:"Data analysis is performed before cleaning data.",correct:"False",reason:"Data cleaning must absolutely be performed before analysis; otherwise, the analysis will be based on errors and inconsistencies."},
+
+// ══════════════════════════════════════════════
+// Sec.3: SPSS & Data Cleaning — MCQ (from Doc 2)
+// ══════════════════════════════════════════════
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 49",question:"Data that represents categories is called:",options:[{label:"a",text:"Quantitative"},{label:"b",text:"Qualitative"},{label:"c",text:"Ratio"},{label:"d",text:"Numeric"}],correct:"b",explanation:"Qualitative data describes categories and labels with no inherent numerical value."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 50",question:"Data that can be ordered without equal intervals is called:",options:[{label:"a",text:"Nominal"},{label:"b",text:"Ordinal"},{label:"c",text:"Ratio"},{label:"d",text:"Quantitative"}],correct:"b",explanation:"Ordinal data has ordered categories, but the difference between ranks is not fixed or precisely defined."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 51",question:"In SPSS, data is entered in:",options:[{label:"a",text:"Variable View"},{label:"b",text:"Data View"},{label:"c",text:"Analyze"},{label:"d",text:"Graph"}],correct:"b",explanation:"The Data View screen displays the spreadsheet format where actual data values are entered into rows and columns."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 52",question:"Variables are defined in:",options:[{label:"a",text:"Data View"},{label:"b",text:"Variable View"},{label:"c",text:"Output"},{label:"d",text:"Graph"}],correct:"b",explanation:"The Variable View is the interface used to configure properties like Name, Type, and Measure for each variable."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 53",question:"Columns in SPSS represent:",options:[{label:"a",text:"Cases"},{label:"b",text:"Variables"},{label:"c",text:"Results"},{label:"d",text:"Rows"}],correct:"b",explanation:"In SPSS Data View, every column acts as a specific variable, and every row is a case."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 54",question:"Frequencies are used when data is:",options:[{label:"a",text:"Numeric"},{label:"b",text:"Categorical"},{label:"c",text:"Images"},{label:"d",text:"Dates"}],correct:"b",explanation:"Frequency analysis is the primary descriptive tool for categorical (Nominal and Ordinal) data."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 55",question:"Descriptive statistics are used when data is:",options:[{label:"a",text:"Text"},{label:"b",text:"Numeric"},{label:"c",text:"Names"},{label:"d",text:"Images"}],correct:"b",explanation:"Descriptive statistics like Mean and Standard Deviation require quantitative, numerical data (Scale)."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 56",question:"Which of the following indicates data dispersion?",options:[{label:"a",text:"Mean"},{label:"b",text:"Std. Deviation"},{label:"c",text:"Percent"},{label:"d",text:"Count"}],correct:"b",explanation:"Standard Deviation measures data dispersion or spread around the mean."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 57",question:"Which of the following is an example of an outlier?",options:[{label:"a",text:"50"},{label:"b",text:"55"},{label:"c",text:"1000 among values 40-60"},{label:"d",text:"45"}],correct:"c",explanation:"The value 1000 deviates significantly from a dataset concentrated between 40 and 60, marking it as an outlier."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 58",question:"The purpose of data cleaning is:",options:[{label:"a",text:"Delete file"},{label:"b",text:"Improve data quality"},{label:"c",text:"Draw chart"},{label:"d",text:"Save file"}],correct:"b",explanation:"Data cleaning improves decision quality by ensuring statistical accuracy and reducing errors."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 59",question:"Which of the following is an example of Nominal Data?",options:[{label:"a",text:"Height"},{label:"b",text:"Weight"},{label:"c",text:"Blood Type"},{label:"d",text:"Age"}],correct:"c",explanation:"Blood type is a category with no inherent mathematical order, making it nominal."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 60",question:"Which of the following is an example of Ordinal Data?",options:[{label:"a",text:"Phone number"},{label:"b",text:"Grade level (Excellent - Good - Fair)"},{label:"c",text:"Age"},{label:"d",text:"Height"}],correct:"b",explanation:"Grade levels are ordered categories (ranked) but lack fixed numerical differences between the ranks."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 61",question:"Which of the following is used to display the percentage of each category from the whole?",options:[{label:"a",text:"Histogram"},{label:"b",text:"Pie Chart"},{label:"c",text:"Boxplot"},{label:"d",text:"Line Chart"}],correct:"b",explanation:"Pie charts are visually designed to show the proportion or percentage of different nominal categories."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 62",question:"Which of the following is considered a primary source of data collection?",options:[{label:"a",text:"Book"},{label:"b",text:"Published report"},{label:"c",text:"Questionnaire"},{label:"d",text:"Magazine"}],correct:"c",explanation:"Questionnaires are core tools used to collect primary data directly from respondents."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 63",question:"Which of the following is a step in Data Cleaning?",options:[{label:"a",text:"Drawing charts"},{label:"b",text:"Removing duplicate values"},{label:"c",text:"Entering data"},{label:"d",text:"Printing results"}],correct:"b",explanation:"Removing duplicate records is one of the essential steps in the SPSS data cleaning process."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 64",question:"You have student data containing Name, Gender, and Grade. Some rows are duplicated. What is the best action?",options:[{label:"a",text:"Ignore them"},{label:"b",text:"Delete duplicates"},{label:"c",text:"Duplicate them"},{label:"d",text:"Draw chart"}],correct:"b",explanation:"Duplicates inflate the sample size and distort results, so exact duplicates must be deleted."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 65",question:"You found empty cells in the grades column. What should you do?",options:[{label:"a",text:"Delete the program"},{label:"b",text:"Replace them with the column mean"},{label:"c",text:"Ignore them"},{label:"d",text:"Delete the file"}],correct:"b",explanation:"Replacing empty cells with the variable's average is a valid imputation method called \"Mean Substitution.\""},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 66",question:"You have salary data: 2000 - 2100 - 2200 - 50000. What type of problem is this?",options:[{label:"a",text:"Duplication"},{label:"b",text:"Missing value"},{label:"c",text:"Outlier"},{label:"d",text:"Normal data"}],correct:"c",explanation:"The value 50000 deviates significantly from the rest of the dataset, making it a clear outlier."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 67",question:"A company wants to know reasons for customer dissatisfaction and provided fixed choices (Price, Speed, Customer service). Type of question:",options:[{label:"a",text:"Open"},{label:"b",text:"Closed"},{label:"c",text:"Analytical"},{label:"d",text:"Descriptive"}],correct:"b",explanation:"Questions that provide fixed response options are classified as Closed-ended."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 68",question:"A student was asked to write his opinion in detail. Type of question:",options:[{label:"a",text:"Open"},{label:"b",text:"Closed"},{label:"c",text:"Rating"},{label:"d",text:"Multiple"}],correct:"a",explanation:"Open-ended questions allow respondents to answer freely and add richer qualitative detail."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 69",question:"A researcher asks the same questions in the same order to all participants. Type of interview:",options:[{label:"a",text:"Structured"},{label:"b",text:"Unstructured"},{label:"c",text:"Semi-structured"},{label:"d",text:"Open"}],correct:"a",explanation:"Structured interviews use predefined questions and a strict, consistent sequence for all participants."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 70",question:"A researcher watches video recordings of students' behavior. Type of observation:",options:[{label:"a",text:"Direct"},{label:"b",text:"Indirect"},{label:"c",text:"Interview"},{label:"d",text:"Questionnaire"}],correct:"b",explanation:"Watching recorded footage rather than observing the event live in person is an indirect form of observation."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 71",question:"You have monthly sales data for a full year. This is an example of:",options:[{label:"a",text:"Cross Section"},{label:"b",text:"Time Series"},{label:"c",text:"Encoding"},{label:"d",text:"Cleaning"}],correct:"b",explanation:"Data collected over regular time intervals (monthly for a year) is perfectly suited for Time Series Analysis."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 72",question:"You want to know the relationship between price and sales. You use:",options:[{label:"a",text:"Regression"},{label:"b",text:"Correlation"},{label:"c",text:"Sorting"},{label:"d",text:"Encoding"}],correct:"b",explanation:"Correlation analysis is used specifically to measure the strength and direction of the relationship between two variables."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 73",question:"You want to predict future sales. You use:",options:[{label:"a",text:"Frequencies"},{label:"b",text:"Regression"},{label:"c",text:"Crosstab"},{label:"d",text:"Filter"}],correct:"b",explanation:"Regression models use historical relationships between variables to predict future numerical values."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 74",question:"You want to compare the mean grades of 3 groups. You use:",options:[{label:"a",text:"Chi-Square"},{label:"b",text:"ANOVA"},{label:"c",text:"Mean"},{label:"d",text:"Histogram"}],correct:"b",explanation:"Analysis of Variance (ANOVA) is the standard statistical test used to compare means across several different groups."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 75",question:"You have data like Male / Female and want to analyze it. You use:",options:[{label:"a",text:"Descriptive"},{label:"b",text:"Regression"},{label:"c",text:"Frequencies"},{label:"d",text:"Time Series"}],correct:"c",explanation:"Male/Female is Nominal (categorical) data, which is analyzed using Frequency tables."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 76",question:"You found dates written in different formats. The first step is:",options:[{label:"a",text:"Draw chart"},{label:"b",text:"Standardize format"},{label:"c",text:"Delete file"},{label:"d",text:"Analyze"}],correct:"b",explanation:"Unifying inconsistent date formats (e.g., to YYYY-MM-DD) is a crucial Data Standardization step before analysis."},
+{type:"mcq",section:"Sec.3: SPSS & Data Cleaning",number:"Question 77",question:"To convert Male / Female into numbers:",options:[{label:"a",text:"Encoding"},{label:"b",text:"Sorting"},{label:"c",text:"Histogram"},{label:"d",text:"Mean"}],correct:"a",explanation:"Converting text categories into numeric values (binary or labeled) is known as Data Encoding."}
+
 ];
 
+// ══════════════════════════════════════════════
+// Essay / Key Concepts
+// ══════════════════════════════════════════════
 const essays=[
-{num:"1",title:"Stages of E-Business Development",items:["Internal IT Use: Focus on internal operational efficiency like accounting and data storage.","Internet & Communication: Using websites for information display and external interaction with customers.","Electronic Integration: Adoption of ERP, CRM, and SCM systems for cross-functional data flow.","Advanced E-Business: Strategic agility using Cloud, Mobile, AI, and Big Data."]},
-{num:"2",title:"Components of the E-Business Model",items:["Value Proposition: The central benefit customers obtain, like speed or personalization.","Customer Segments: The target groups (B2C, B2B) the organization serves.","Digital Channels: Primary points of interaction like websites and apps.","Customer Relationships: How relationships are managed digitally (e.g., self-service, online support).","Revenue Streams: Methods of generating financial returns, like subscriptions or direct sales.","Key Resources & Activities: Essential assets (data, talent) and crucial actions (digital marketing, analytics).","Key Partners & Cost Structure: Network of suppliers and all operational expenses."]},
-{num:"3",title:"Types of E-Business Models",items:["Direct Online Sales: Selling directly to customers without intermediaries (e.g., Dell).","Platform-Based: Acting as a digital intermediary connecting multiple parties (e.g., Uber, Airbnb).","Subscription Model: Offering digital services for recurring fees (e.g., Netflix).","Freemium Model: Offering basic services for free, while advanced features require payment (e.g., Spotify).","Advertising-Based: Providing free content to generate revenue through targeted ads (e.g., YouTube).","Commission Model: Earning a fee for facilitating transactions (e.g., Amazon Marketplace)."]},
-{num:"4",title:"E-Business Strategies",items:["Digital Differentiation: Delivering distinctive digital value and superior customer experience (e.g., Apple).","Digital Cost Leadership: Minimizing operational costs to allow competitive pricing (e.g., Amazon).","Digital Focus: Targeting a specific niche market with customized solutions (e.g., LinkedIn).","Platform Strategy: Orchestrating a digital ecosystem connecting multiple parties (e.g., Uber).","Continuous Innovation: Ongoing evolution of products based on data analysis (e.g., Spotify)."]},
-{num:"5",title:"Types of E-Commerce",items:["B2B (Business-to-Business): Commercial transactions between business entities.","B2C (Business-to-Consumer): Transactions directly between companies and the final consumer.","C2C (Consumer-to-Consumer): Individuals selling to other individuals via an intermediary.","B2G (Business-to-Government): Private companies providing goods to government entities.","G2C (Government-to-Consumer): Government entities providing digital services to citizens.","C2B (Consumer-to-Business): Individuals offering value or services to businesses."]},
-{num:"6",title:"E-Commerce Infrastructure",items:["Technical Infrastructure (TECH): Hardware, software, and servers enabling online operations.","Network & Connectivity (NET): Stable communication networks for transmitting data.","Electronic Payment Systems (PAY): Secure mechanisms facilitating the transfer of funds.","Database Management Systems (DATA): Systems to organize critical data like customer profiles and inventory.","Security Systems (SEC): Protocols protecting data, including encryption and fraud detection.","Integration with Operations (INT): Connecting front-ends with back-end systems like accounting and logistics."]},
-{num:"7",title:"The Electronic Payment Cycle",items:["Initiate Payment: The customer enters card details to start the transaction.","Encryption & Request: Payment data is encrypted and securely transmitted.","Routing: The authorization request is routed to the issuing bank.","Authorization: The bank verifies card validity and approves or declines the transaction.","Fund Hold & Confirmation: The amount is placed on hold, and the merchant is notified.","Settlement: Funds are transferred to the merchant's account after deductions."]},
-{num:"8",title:"Types of E-Retailing Models",items:["Standalone Store: A company owns its website and sells directly with full control.","Online Marketplace: Platform connecting multiple sellers to buyers.","Hybrid Model: Combines direct sales with third-party seller offers on the same platform.","Dropshipping: The store takes orders but holds no stock; suppliers ship directly.","Social Commerce: Direct selling via social platforms like Instagram or TikTok."]},
-{num:"9",title:"Types of Modern ERP Systems",items:["On-Premise ERP: Installed within the company with full control over data.","Cloud ERP: Hosted by a provider over the internet with high flexibility.","Hybrid ERP: Combines cloud and on-premise solutions."]},
-{num:"10",title:"Types of Digital Marketing Channels",items:["Social Media Marketing: Facebook, Instagram, LinkedIn.","Search Engine Marketing (SEM): Paid search marketing like Google Ads.","Search Engine Optimization (SEO): Optimizing content to rank higher in search results organically.","Content Marketing: Articles, videos, podcasts.","Email Marketing: Welcome messages, promotions, customer care.","Mobile Marketing: SMS, in-app ads, brand apps.","Influencer Marketing: Partnering with influencers to promote products."]}
+{num:"1",title:"Types of Data in Statistics",items:[
+  "Qualitative (Categorical) Data: Describes categories or labels with no inherent numerical value.",
+  "Nominal Data: Categories with no order (e.g., gender, blood type, country).",
+  "Ordinal Data: Ordered categories, but the differences between ranks are not fixed (e.g., education level, grade ratings).",
+  "Quantitative (Numerical) Data: Measured with numbers; arithmetic is meaningful.",
+  "Interval Data: Meaningful differences but no true zero (e.g., temperature).",
+  "Ratio Data: Meaningful differences AND a true zero (e.g., age, weight, height).",
+  "SPSS Classification: Nominal → Nominal; Ordinal → Ordinal; Interval + Ratio → Scale."
+]},
+{num:"2",title:"Levels of Measurement & Analysis Methods",items:[
+  "Nominal Level: Counting and frequency; Chi-square test; Pie charts and bar charts.",
+  "Ordinal Level: Ranking comparisons (greater/smaller); Spearman correlation; Bar charts.",
+  "Interval Level (Scale): Mean and standard deviation; Pearson correlation; Histograms.",
+  "Ratio Level (Scale): All arithmetic operations; Regression analysis; Histograms, scatter plots."
+]},
+{num:"3",title:"Primary vs. Secondary Data",items:[
+  "Primary Data: Collected for the first time by the researcher; tailored to the specific study; more accurate; more expensive and time-consuming.",
+  "Secondary Data: Previously collected by others for a different purpose; less expensive; quicker to obtain; may be less accurate for the current study.",
+  "Sources of Primary Data: Questionnaires, interviews, observation, experiments.",
+  "Sources of Secondary Data: Government reports, published articles, books, official databases."
+]},
+{num:"4",title:"Methods of Data Collection",items:[
+  "Questionnaire: Structured set of questions given to respondents; can include closed-ended, open-ended, multiple-choice, and rating scale questions.",
+  "Interview: Direct conversation; can be structured (same questions for all), semi-structured, or unstructured (open conversation).",
+  "Observation: Watching and recording behavior; Direct observation (live) or Indirect observation (recorded footage).",
+  "Document Analysis: Examining books, reports, archives, and official records; widely used in historical and social research."
+]},
+{num:"5",title:"Structured vs. Unstructured Data",items:[
+  "Structured Data: Organized in tables and databases; easy to enter and analyze in SPSS; examples: spreadsheets, survey responses.",
+  "Unstructured Data: No fixed format; includes text, images, videos, and audio; requires advanced tools like AI and text mining for analysis.",
+  "Social media content is a major example of unstructured data.",
+  "Structured data is suitable for SPSS; unstructured requires specialized tools."
+]},
+{num:"6",title:"Data Cleaning in SPSS",items:[
+  "Step 1 — Handle Missing Values: Replace with mean (Mean Substitution) or delete the row.",
+  "Step 2 — Detect and Handle Outliers: Use Boxplot to identify outliers; decide whether to keep, replace, or delete them.",
+  "Step 3 — Remove Duplicates: Identify and delete exact duplicate records to prevent sample size inflation.",
+  "Step 4 — Standardize Data Format: Unify inconsistent formats (e.g., dates, units, text casing).",
+  "Key Rule: Always clean data BEFORE analysis — Garbage In, Garbage Out."
+]},
+{num:"7",title:"Statistical Analysis Methods",items:[
+  "Frequencies: Used for categorical (Nominal and Ordinal) data; shows counts and percentages.",
+  "Descriptive Statistics: Used for numerical (Scale) data; shows mean, standard deviation, min, max.",
+  "Correlation: Measures the strength and direction of the relationship between two variables (Pearson for numerical; Spearman for ordinal/non-linear). Ranges from -1 to +1.",
+  "Regression: Used for prediction; builds a model to forecast future numerical values based on historical data.",
+  "ANOVA: Compares means across three or more groups.",
+  "Chi-Square: Tests relationships between categorical (Nominal) variables.",
+  "Time Series: Analyzes data collected over time to identify trends and seasonal patterns.",
+  "Factor Analysis: Reduces a large set of variables into a smaller set of key components."
+]},
+{num:"8",title:"SPSS Interface Overview",items:[
+  "Data View: The spreadsheet where data is entered; rows = Cases (observations); columns = Variables.",
+  "Variable View: Where variable properties are defined; Name, Type, Width, Decimals, Label, Values, Measure.",
+  "Measure Types in SPSS: Nominal (categorical, no order), Ordinal (categorical, ordered), Scale (interval or ratio).",
+  "Output Window: Displays results of any analysis run through the Analyze menu."
+]},
+{num:"9",title:"Data Encoding",items:[
+  "Label Encoding: Converts ordered categories into sequential numbers (e.g., Grade A=4, B=3, C=2, D=1).",
+  "One-Hot Encoding: Converts a single categorical variable into multiple binary (0/1) columns, one per category.",
+  "Purpose: Most statistical methods and machine learning models require numerical input, so categorical data must be encoded.",
+  "Example: Gender (Male/Female) → Label Encoding: Male=1, Female=0 OR One-Hot: Male_col and Female_col."
+]},
+{num:"10",title:"Correlation Coefficients",items:[
+  "Pearson (r): Measures linear relationship between two numerical (Scale) variables that follow a normal distribution.",
+  "Spearman (ρ): Measures monotonic relationship for ordinal data or when the relationship is non-linear.",
+  "r = 0: No correlation between the variables.",
+  "r = +1: Perfect positive linear relationship (as one increases, the other increases proportionally).",
+  "r = -1: Perfect negative linear relationship (as one increases, the other decreases proportionally).",
+  "The closer to ±1, the stronger the relationship."
+]}
 ];
 
 let all=[],filtered=[],ci=0;
 
 function init(){
-all=Q.map((q,i)=>({...q,id:i,answered:false,selected:null,isCorrect:null}));
-const chapters=[...new Set(Q.map(q=>q.section))];
-const sel=document.getElementById("chapterFilter");
-chapters.forEach(ch=>{const o=document.createElement("option");o.value=ch;o.textContent=ch;sel.appendChild(o)});
-filtered=[...all];ci=0;updateStats();render();buildEssays();
+  all=Q.map((q,i)=>({...q,id:i,answered:false,selected:null,isCorrect:null}));
+  const sections=[...new Set(Q.map(q=>q.section))];
+  const sel=document.getElementById("chapterFilter");
+  sections.forEach(ch=>{const o=document.createElement("option");o.value=ch;o.textContent=ch;sel.appendChild(o)});
+  filtered=[...all];ci=0;updateStats();render();buildEssays();
+  document.addEventListener("keydown",handleKey);
 }
 
 function buildEssays(){
-const c=document.getElementById("essayQuestionsContainer");
-c.innerHTML=essays.map(e=>`
-<div class="essay-card">
-<span class="essay-q-number">Q${e.num}</span>
-<div class="essay-q-title">${e.title}</div>
-<div class="essay-content">
-${e.items.map(item=>`<div class="essay-item">${item}</div>`).join("")}
-</div>
-</div>
-`).join("");
+  const c=document.getElementById("essayQuestionsContainer");
+  c.innerHTML=essays.map(e=>`
+  <div class="essay-card">
+  <span class="essay-q-number">Topic ${e.num}</span>
+  <div class="essay-q-title">${e.title}</div>
+  <div class="essay-content">
+  ${e.items.map(item=>`<div class="essay-item">${item}</div>`).join("")}
+  </div>
+  </div>
+  `).join("");
 }
 
 function switchMode(m){
-document.getElementById("quizContent").classList.toggle("hidden",m==="essay");
-document.getElementById("essayContent").classList.toggle("hidden",m==="quiz");
-document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
-event.target.classList.add("active");
-if(m==="quiz")document.getElementById("statsSection").classList.remove("hidden");
-else document.getElementById("statsSection").classList.add("hidden");
+  document.getElementById("quizContent").classList.toggle("hidden",m==="essay");
+  document.getElementById("essayContent").classList.toggle("hidden",m==="quiz");
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+  if(m==="quiz")document.getElementById("statsSection").classList.remove("hidden");
+  else document.getElementById("statsSection").classList.add("hidden");
+  dismissOverlay();
 }
 
 function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 function rt(t){return esc(t).replace(/\n/g,"<br>")}
 
 function render(){
-const c=document.getElementById("questionCard");
-if(!filtered.length){c.innerHTML='<div class="feedback wrong">No questions match your filters.</div>';return}
-if(ci>=filtered.length)ci=filtered.length-1;
-if(ci<0)ci=0;
-const q=filtered[ci];
-const tl=q.type==="tf"?"True / False":"MCQ";
-const bc=q.type==="tf"?"badge-tf":"badge-mcq";
-let ah="";
-if(q.type==="tf"){
-["True","False"].forEach(o=>{
-let cls="answer-btn";
-if(q.answered){if(o===q.correct)cls+=" correct";if(o===q.selected&&o!==q.correct)cls+=" wrong"}
-ah+=`<button class="${cls}" onclick="answer('${o}')" ${q.answered?"disabled":""}>${o}</button>`;
-});
-}else{
-q.options.forEach(o=>{
-let cls="answer-btn";
-if(q.answered){if(o.label===q.correct)cls+=" correct";if(o.label===q.selected&&o.label!==q.correct)cls+=" wrong"}
-ah+=`<button class="${cls}" onclick="answer('${o.label}')" ${q.answered?"disabled":""}><strong>${esc(o.label).toUpperCase()})</strong> ${rt(o.text)}</button>`;
-});
-}
-let fb="";
-if(q.answered){
-const ct=q.type==="tf"?q.correct:`${q.correct.toUpperCase()}) ${q.options.find(o=>o.label===q.correct).text}`;
-fb=`<div class="feedback ${q.isCorrect?"correct":"wrong"}">${q.isCorrect?"✅ Correct!":"❌ Wrong."}<div class="detail">Correct Answer: ${rt(ct)}</div>${q.reason?`<div class="detail">Reason: ${rt(q.reason)}</div>`:""}${q.explanation?`<div class="detail">Explanation: ${rt(q.explanation)}</div>`:""}</div>`;
-}
-
-const isLastQuestion=ci===filtered.length-1;
-const completionMsg=isLastQuestion&&q.answered?showCompletionMessage():"";
-
-c.innerHTML=`<div class="q-header"><span class="badge ${bc}">${tl}</span><span class="badge badge-num">${ci+1} / ${filtered.length}</span></div><div class="section-label">${rt(q.section)} — ${rt(q.number)}</div><div class="q-text">${rt(q.question)}</div><div class="answers">${ah}</div>${fb}${completionMsg}`;
-updProg();
+  const c=document.getElementById("questionCard");
+  if(!filtered.length){c.innerHTML='<div class="feedback wrong">No questions match your filters.</div>';return}
+  if(ci>=filtered.length)ci=filtered.length-1;
+  if(ci<0)ci=0;
+  const q=filtered[ci];
+  const tl=q.type==="tf"?"True / False":"MCQ";
+  const bc=q.type==="tf"?"badge-tf":"badge-mcq";
+  let ah="";
+  if(q.type==="tf"){
+    ["True","False"].forEach(o=>{
+      let cls="answer-btn";
+      if(q.answered){if(o===q.correct)cls+=" correct";if(o===q.selected&&o!==q.correct)cls+=" wrong"}
+      ah+=`<button class="${cls}" onclick="answer('${o}')" ${q.answered?"disabled":""}>${o}</button>`;
+    });
+  }else{
+    q.options.forEach(o=>{
+      let cls="answer-btn";
+      if(q.answered){if(o.label===q.correct)cls+=" correct";if(o.label===q.selected&&o.label!==q.correct)cls+=" wrong"}
+      ah+=`<button class="${cls}" onclick="answer('${o.label}')" ${q.answered?"disabled":""}><strong>${esc(o.label).toUpperCase()})</strong> ${rt(o.text)}</button>`;
+    });
+  }
+  let fb="";
+  if(q.answered){
+    const ct=q.type==="tf"?q.correct:`${q.correct.toUpperCase()}) ${q.options.find(o=>o.label===q.correct).text}`;
+    fb=`<div class="feedback ${q.isCorrect?"correct":"wrong"}">${q.isCorrect?"✅ Correct!":"❌ Wrong."}<div class="detail">Correct Answer: ${rt(ct)}</div>${q.reason?`<div class="detail">Reason: ${rt(q.reason)}</div>`:""}${q.explanation?`<div class="detail">Explanation: ${rt(q.explanation)}</div>`:""}</div>`;
+  }
+  c.innerHTML=`<div class="q-header"><span class="badge ${bc}">${tl}</span><span class="badge badge-num">${ci+1} / ${filtered.length}</span></div><div class="section-label">${rt(q.section)} — ${rt(q.number)}</div><div class="q-text">${rt(q.question)}</div><div class="answers">${ah}</div>${fb}`;
+  updProg();
+  checkCompletion();
 }
 
+function checkCompletion(){
+  const lastSection=all[all.length-1]?.section;
+  const sectionQs=all.filter(x=>x.section===lastSection);
+  const allSectionDone=sectionQs.length>0&&sectionQs.every(x=>x.answered);
+  const chapterSel=document.getElementById("chapterFilter").value;
+  const isViewing=chapterSel==="all"||chapterSel===lastSection;
+  const overlayEl=document.getElementById("completionOverlay");
+  if(allSectionDone&&isViewing){
+    if(!overlayEl)document.body.insertAdjacentHTML("beforeend",showCompletionMessage());
+  }else{
+    if(overlayEl)overlayEl.remove();
+  }
+}
+
+function dismissOverlay(){const o=document.getElementById("completionOverlay");if(o)o.remove()}
+
+function showCompletionMessage(){
+  return `<div class="completion-overlay" id="completionOverlay" onclick="handleOverlayClick(event)">
+  <div class="completion-modal">
+  <div class="completion-heart">🎯</div>
+  <div class="completion-text">ادعيلي دعوه حلوه</div>
+  <div class="completion-subtitle">You've completed all the questions!</div>
+  <div class="completion-actions">
+  <button class="btn-restart-comp" onclick="restartQuiz()">↻ Restart Quiz</button>
+  <button class="btn-back-comp" onclick="switchMode('essay')">◈ View Key Concepts</button>
+  </div>
+  </div></div>`;
+}
+
+function handleOverlayClick(e){if(e.target.id==="completionOverlay")document.getElementById("completionOverlay").remove()}
 
 function answer(s){
-const q=filtered[ci];if(!q||q.answered)return;
-q.answered=true;q.selected=s;q.isCorrect=s===q.correct;
-const o=all.find(x=>x.id===q.id);if(o){o.answered=q.answered;o.selected=q.selected;o.isCorrect=q.isCorrect}
-updateStats();render();
+  const q=filtered[ci];if(!q||q.answered)return;
+  q.answered=true;q.selected=s;q.isCorrect=s===q.correct;
+  const o=all.find(x=>x.id===q.id);if(o){o.answered=q.answered;o.selected=q.selected;o.isCorrect=q.isCorrect}
+  updateStats();render();
 }
 
 function updateStats(){
-const t=all.length,a=all.filter(q=>q.answered).length,co=all.filter(q=>q.isCorrect).length,p=a?Math.round(co/a*100):0;
-document.getElementById("totalCount").textContent=t;
-document.getElementById("answeredCount").textContent=a;
-document.getElementById("scoreCount").textContent=co;
-document.getElementById("percentCount").textContent=p+"%";
+  const t=all.length,a=all.filter(q=>q.answered).length,co=all.filter(q=>q.isCorrect).length,p=a?Math.round(co/a*100):0;
+  document.getElementById("totalCount").textContent=t;
+  document.getElementById("answeredCount").textContent=a;
+  document.getElementById("scoreCount").textContent=co;
+  document.getElementById("percentCount").textContent=p+"%";
 }
 
 function updProg(){
-const a=all.filter(q=>q.answered).length,t=all.length||1;
-document.getElementById("progressBar").style.width=Math.round(a/t*100)+"%";
+  const a=all.filter(q=>q.answered).length,t=all.length||1;
+  document.getElementById("progressBar").style.width=Math.round(a/t*100)+"%";
 }
 
 function next(){if(ci<filtered.length-1){ci++;render()}}
 function prev(){if(ci>0){ci--;render()}}
-function restart(){if(!confirm("Restart quiz and clear all answers?"))return;all.forEach(q=>{q.answered=false;q.selected=null;q.isCorrect=null});ci=0;applyFilters();updateStats();render()}
+function restartQuiz(){dismissOverlay();all.forEach(q=>{q.answered=false;q.selected=null;q.isCorrect=null});ci=0;applyFilters();updateStats();render()}
+function restart(){if(!confirm("Restart quiz and clear all answers?"))return;restartQuiz()}
 
 function applyFilters(){
-const ch=document.getElementById("chapterFilter").value;
-const tp=document.getElementById("typeFilter").value;
-const st=document.getElementById("statusFilter").value;
-filtered=all.filter(q=>{
-const mc=ch==="all"||q.section===ch;
-const mt=tp==="all"||q.type===tp;
-let ms=true;
-if(st==="unanswered")ms=!q.answered;
-else if(st==="answered")ms=q.answered;
-else if(st==="wrong")ms=q.isCorrect===false;
-return mc&&mt&&ms;
-});
-ci=0;render();
+  const ch=document.getElementById("chapterFilter").value;
+  const tp=document.getElementById("typeFilter").value;
+  const st=document.getElementById("statusFilter").value;
+  filtered=all.filter(q=>{
+    const mc=ch==="all"||q.section===ch;
+    const mt=tp==="all"||q.type===tp;
+    let ms=true;
+    if(st==="unanswered")ms=!q.answered;
+    else if(st==="answered")ms=q.answered;
+    else if(st==="wrong")ms=q.isCorrect===false;
+    return mc&&mt&&ms;
+  });
+  ci=0;dismissOverlay();render();
+}
+
+function handleKey(e){
+  if(document.getElementById("quizContent").classList.contains("hidden"))return;
+  if(e.key==="ArrowRight")next();
+  else if(e.key==="ArrowLeft")prev();
 }
 
 document.addEventListener("DOMContentLoaded",init);
